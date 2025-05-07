@@ -14,6 +14,7 @@
 
 .form__container-header{
     text-align: center;
+    color:red;
 }
 
 .form__container-label{
@@ -22,6 +23,10 @@
 
 .form__container-input{
     margin-bottom: 15px;
+}
+
+.form__container-info{
+    font-size: 12px;
 }
 
 .form__container-btn{
