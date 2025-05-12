@@ -20,14 +20,17 @@
         ){
             try {
                 $token = bin2hex(random_bytes(32));
+                $createdAt = date('Y-m-d H:i:s');
                 $link = "http://localhost:8000/activate.php?token=$token";
                 $message = "Kliknij w link aby aktywowac konto: \n\n$link";
                 mail($email, "Aktywacja konta Garden", $message, "From: no-reply@garden.pl");
 
                 $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-                $sql = "INSERT INTO users (login, email, password, activation_token, confirmed) VALUES ('$login', '$email', '$password', '$token', false)";
-                $conn->exec($sql);
+                $stmt = $conn->prepare("INSERT INTO users (login, email, password, activation_token, activation_token_created_at, confirmed) VALUES (?, ?, ?, ?, ?, ?)");
+
+                $stmt->execute(['$login', '$email', '$password', '$token', '$createdAt', false]);
+
             }catch (PDOException $e){
                 if($e->getCode() == "23000"){
                     echo"<script>alert('Użytkownik o podanym loginie lub emailu już istnieje.');</script><script>window.location='index.php'</script>)";

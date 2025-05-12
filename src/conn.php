@@ -8,6 +8,6 @@ $db_password = 'secret';
 $conn = new PDO("mysql:host=$db_host;dbname=$db_name", $db_username, $db_password);
 
 if(!$conn){
-    die("Connection failed: " . mysqli_connect_error());
+    die("Połączenie nieudane: " . mysqli_connect_error());
 }
 ?>
