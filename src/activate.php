@@ -9,7 +9,7 @@ if($token){
     $user = $stmt->fetch();
 
     if($user && !$user['confirmed']){
-        $createdAt = new DateTime($user('activation_token_created_at'));
+        $createdAt = new DateTime($user['activation_token_created_at']);
         $now = new DateTime();
         $interval = $createdAt->diff($now);
 

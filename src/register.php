@@ -29,7 +29,7 @@
 
                 $stmt = $conn->prepare("INSERT INTO users (login, email, password, activation_token, activation_token_created_at, confirmed) VALUES (?, ?, ?, ?, ?, ?)");
 
-                $stmt->execute(['$login', '$email', '$password', '$token', '$createdAt', false]);
+                $stmt->execute([$login, $email, $password, $token, $createdAt, 0]);
 
             }catch (PDOException $e){
                 if($e->getCode() == "23000"){
@@ -39,7 +39,7 @@
                 }
             $_SESSION['message']=array("text"=>"Pomyślnie dodano użytkownika.","alert-type"=>"success");
             $conn = null;
-            header('location:index.php');
+            header('Location:index.php');
             }
         }else {
             echo"<script>alert('Coś poszło nie tak, spróbuj ponownie');</script>)<script>window.location='index.php'</script>";

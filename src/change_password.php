@@ -3,6 +3,7 @@ session_start();
 require_once 'conn.php';
 
 if(!isset($_SESSION['user_id'])){
+    echo 'Ciasto z dziaslem';
     header("Location: loginPanel.php");
     exit;
 }

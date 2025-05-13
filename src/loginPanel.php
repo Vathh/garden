@@ -11,8 +11,8 @@
 </head>
 <body>
 <main>
-    <?php require_once "loginPanel.php" ?>
-    <form name="loginForm" class="form" action="loginPanel.php" method="POST">
+    <?php require_once "login.php" ?>
+    <form name="loginForm" class="form" action="login.php" method="POST">
         <div class="form__container">
             <h1 class="form__container-header">Sign In</h1>
 
@@ -22,7 +22,7 @@
             <label class="form__container-label" for="password"><b>Password</b></label>
             <input class="form__container-input" type="password" placeholder="Enter Password" name="password" id="password" required>
 
-            <button class="form__container-btn" type="submit" name="register">Register</button>
+            <button class="form__container-btn" type="submit" name="loginBtn">Submit</button>
         </div>
     </form>
 </main>

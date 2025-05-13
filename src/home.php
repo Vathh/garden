@@ -1,6 +1,5 @@
 <?php
-
-    session_start();
+session_start();
 
     if(isset($_SESSION['user_id'])){
         header("Location: loginPanel.php");
@@ -15,6 +14,8 @@
     }
 
     $_SESSION['last_activity'] = time();
+
+    echo $_SESSION['user_id'];
 ?>
 
 <!DOCTYPE html>
@@ -32,11 +33,11 @@
 <main>
     <h1>Witaj!</h1>
 
-    <form action="change_password.php" method="get" style="display:inline;">
+    <form action="changePasswordForm.php" method="GET" style="display:inline;">
         <button type="submit">Zmień hasło</button>
     </form>
 
-    <form action="logout.php" method="post" style="display:inline;">
+    <form action="logout.php" method="POST" style="display:inline;">
         <button type="submit">Wyloguj się</button>
     </form>
 </main>

@@ -1,4 +1,5 @@
 <?php
+session_start();
     require_once "conn.php";
 
     $login = $_POST["login"];
@@ -8,7 +9,7 @@
     $stmt->execute([$login]);
     $user = $stmt->fetch();
 
-    if($user && password_verify($password, $user["password"])){
+    if($user && $password == $user['password']){
         if(!$user['confirmed']){
             echo "Konto nieaktywne. Sprawdź pocztę.";
             exit;

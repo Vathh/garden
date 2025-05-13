@@ -1,3 +1,5 @@
+<?php require_once "register.php"?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,7 +13,6 @@
 </head>
 <body>
 <main>
-    <?php require_once "register.php"?>
     <form name="registerForm" class="form"  action="register.php" method="POST">
         <div class="form__container">
             <h1 class="form__container-header">Register</h1>
