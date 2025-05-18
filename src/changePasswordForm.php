@@ -10,7 +10,6 @@ session_start();
     <title>My Website</title>
     <link rel="stylesheet" href="./style.css">
     <link rel="icon" href="./favicon.ico" type="image/x-icon">
-    <script src="registerValidation.js" defer></script>
 </head>
 <body>
 <main>

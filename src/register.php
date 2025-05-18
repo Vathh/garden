@@ -8,14 +8,14 @@
         $password = $_POST['password'];
         $passwordRepeat = $_POST['passwordRepeat'];
         if( $login != "" &&
-            strlen($login) > 5 &&
+            strlen($login) >= 5 &&
             preg_match('/^[a-zA-Z0-9]+$/', $login) &&
             $email != "" &&
             filter_var($email, FILTER_VALIDATE_EMAIL) &&
             $password != "" &&
             $passwordRepeat != "" &&
             $password === $passwordRepeat &&
-            strlen($password) > 5 &&
+            strlen($password) >= 5 &&
             preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/', $password)
         ){
             try {
@@ -37,9 +37,8 @@
                 }else{
                     echo $e->getMessage();
                 }
-            $_SESSION['message']=array("text"=>"Pomyślnie dodano użytkownika.","alert-type"=>"success");
             $conn = null;
-            header('Location:index.php');
+            header('Location:loginPanel.php?msg=user_added');
             }
         }else {
             echo"<script>alert('Coś poszło nie tak, spróbuj ponownie');</script>)<script>window.location='index.php'</script>";

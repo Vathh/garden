@@ -1,5 +1,4 @@
 <?php require_once "register.php"?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>

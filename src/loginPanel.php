@@ -1,3 +1,13 @@
+<?php require_once "login.php";
+
+    if(isset($_GET['msg']) && $_GET['msg'] == "password_changed"){
+        echo "<script>alert('Hasło zostało pomyślnie zmienione. Zaloguj się ponownie.');</script>";
+    }
+
+if(isset($_GET['msg']) && $_GET['msg'] == "inactive"){
+    echo "<script>alert('Sesja wygasła. Zaloguj się ponownie.');</script>";
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,11 +17,9 @@
     <title>My Website</title>
     <link rel="stylesheet" href="./style.css">
     <link rel="icon" href="./favicon.ico" type="image/x-icon">
-    <script src="registerValidation.js" defer></script>
 </head>
 <body>
 <main>
-    <?php require_once "login.php" ?>
     <form name="loginForm" class="form" action="login.php" method="POST">
         <div class="form__container">
             <h1 class="form__container-header">Sign In</h1>

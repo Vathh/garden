@@ -1,21 +1,19 @@
 <?php
 session_start();
 
-    if(isset($_SESSION['user_id'])){
+    if(!isset($_SESSION['user_id'])){
         header("Location: loginPanel.php");
         exit;
     }
 
-    if(isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] < 600)){
+    if(!(isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] < 10))){
         session_unset();
         session_destroy();
-        header("Location: loginPanel.php");
+        header("Location: loginPanel.php?msg=inactive");
         exit;
     }
 
     $_SESSION['last_activity'] = time();
-
-    echo $_SESSION['user_id'];
 ?>
 
 <!DOCTYPE html>
@@ -27,7 +25,7 @@ session_start();
     <title>My Website</title>
     <link rel="stylesheet" href="./style.css">
     <link rel="icon" href="./favicon.ico" type="image/x-icon">
-    <script src="registerValidation.js" defer></script>
+    <script src="inactiveLogout.js"></script>
 </head>
 <body>
 <main>
