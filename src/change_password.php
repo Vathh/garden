@@ -7,7 +7,7 @@ if(!isset($_SESSION['user_id'])){
     exit;
 }
 
-if(!(isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] < 10))){
+if(!(isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] < 600))){
     session_unset();
     session_destroy();
     header("Location: loginPanel.php?msg=inactive");
