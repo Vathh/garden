@@ -7,9 +7,13 @@ services:
       dockerfile: /Dockerfile
     container_name: php_83_app
     volumes:
-      - ./src:/var/www/html
+      - .:/var/www
+      - ./docker/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+    environment:
+      XDEBUG_MODE: debug
     ports:
       - "8000:80"
+      - "9003:9003"
     depends_on:
       db :
         condition: service_healthy
