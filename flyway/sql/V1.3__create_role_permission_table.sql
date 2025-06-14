@@ -3,5 +3,5 @@ CREATE TABLE role_permission (
     permission_id INT,
     PRIMARY KEY (role_id, permission_id),
     FOREIGN KEY (role_id) REFERENCES roles(id),
-    FOREIGN KEY (permission_id) REFERENCES permissions(id),
+    FOREIGN KEY (permission_id) REFERENCES permissions(id)
 );

@@ -6,10 +6,11 @@ use App\Core\Router;
 use App\Controller\AuthController;
 use App\Controller\HomeController;
 
+session_start();
+
 $router = new Router();
 
 
-// Define routes
 $router->get('/', [HomeController::class, 'loadHomePage']);
 
 $router->get('/login', [AuthController::class, 'showLoginForm']);
@@ -24,5 +25,4 @@ $router->post('/activate', [AuthController::class, 'activate']);
 
 $router->post('/register', [AuthController::class, 'register']);
 
-// Handle the current request
 echo $router->resolve();

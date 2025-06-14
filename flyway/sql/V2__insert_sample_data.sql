@@ -1,6 +1,3 @@
-INSERT INTO users (login, email, password, confirmed) VALUES
-('ciasto', 'ciasto@ciasto.com', 'ciasto123', true);
-
 INSERT INTO roles (name) VALUES
 ('admin'),
 ('user'),
@@ -14,3 +11,6 @@ INSERT INTO role_permission (role_id, permission_id) VALUES
 (1, 1),
 (1, 2),
 (2, 2);
+
+INSERT INTO users (login, email, password, role_id, confirmed) VALUES
+('ciasto', 'ciasto@ciasto.com', 'ciasto123', 1, true);

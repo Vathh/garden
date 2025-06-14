@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use App\Core\Auth;
 use App\Core\Database;
+use App\Model\Role;
+use App\Model\User;
 use DateTime;
 use Exception;
 use JetBrains\PhpStorm\NoReturn;
@@ -29,32 +32,27 @@ class AuthController
             echo "<script>alert('Sesja wygasła. Zaloguj się ponownie.');</script>";
         }
 
+        if (isset($_GET['msg']) && $_GET['msg'] == "activation") {
+            echo "<script>alert('Konto nieaktywne. Sprawdź pocztę.');</script>";
+        }
+
         require __DIR__ . '/../View/loginPanel.php';
     }
 
     public function login(): void
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
+        Auth::startSessionIfItsNot();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $login = $_POST["login"];
-            $password = $_POST["password"];
+            $user = $this->attemptLogin($_POST['login'], $_POST['password']);
 
-            $stmt = $this->conn->prepare("SELECT * FROM users WHERE login = ?");
-            $stmt->execute([$login]);
-            $user = $stmt->fetch();
-
-            if ($user && $password == $user['password']) {
-                if (!$user['confirmed']) {
-                    echo "Konto nieaktywne. Sprawdź pocztę.";
+            if ($user) {
+                if (!$user->confirmed) {
+                    header("Location: /login?msg=activation");
                     exit;
                 }
-
-                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['user'] = $user;
                 $_SESSION['last_activity'] = time();
-
                 header("Location: / ");
                 exit;
             } else {
@@ -143,9 +141,8 @@ class AuthController
         }
     }
 
-    public function logout(): void
+    #[NoReturn] public function logout(): void
     {
-        session_start();
         session_unset();
         session_destroy();
         header("Location: /login");
@@ -154,32 +151,16 @@ class AuthController
 
     public function showChangePasswordForm(): void
     {
-        session_start();
-
         require __DIR__ . '/../View/changePasswordForm.php';
     }
 
     public function changePassword(): void
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
+        Auth::startSessionIfItsNot();
 
-        if (!isset($_SESSION['user_id'])) {
-            header("Location: /login");
-            exit;
-        }
+        Auth::requireAuth();
 
-        if (!(isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] < 600))) {
-            session_unset();
-            session_destroy();
-            header("Location: /login?msg=inactive");
-            exit;
-        }
-
-        $_SESSION['last_activity'] = time();
-
-        $userId = $_SESSION['user_id'];
+        $userId = unserialize($_SESSION['user'])->id;
         $oldPassword = $_POST['old_password'];
         $newPassword = $_POST['new_password'];
         $confirmPassword = $_POST['confirm_password'];
@@ -210,9 +191,62 @@ class AuthController
         }
     }
 
-    function userHasPermission($permission): bool{
-        $userId = $_SESSION['user_id'];
+    private function attemptLogin(string $login, string $password): ?User
+    {
+        $query = "
+            SELECT
+                u.id AS user_id,
+                u.login,
+                u.email,
+                u.password,
+                u.confirmed,
+                r.id AS role_id,
+                r.name AS role_name,
+                p.name AS permission_name
+            FROM users u
+            JOIN roles r ON u.role_id = r.id
+            LEFT JOIN role_permission rp ON rp.role_id = r.id
+            LEFT JOIN permissions p ON p.id = rp.permission_id
+            WHERE u.login = ?
+        ";
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute([$login]);
+            $response = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+        if ($response == null) {
+            return null;
+        }
 
+        $user = $response[0];
+
+        if (!$user['confirmed']) {
+            echo "Konto nieaktywne. Sprawdź pocztę.";
+            exit;
+        }
+
+        if ($password !== $user['password']) {
+            return null;
+        }
+
+        $permissions = [];
+        foreach ($response as $row) {
+            if ($row['permission_name']) {
+                $permissions[] = $row['permission_name'];
+            }
+        }
+
+        $role = new Role([
+            'id' => $user['role_id'],
+            'name' => $user['role_name'],
+            'permissions' => $permissions
+        ]);
+
+        return new User([
+            'id' => $user['user_id'],
+            'login' => $user['login'],
+            'email' => $user['email'],
+            'confirmed' => $user['confirmed'],
+            'role' => $role
+        ]);
     }
 }
