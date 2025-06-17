@@ -64,3 +64,30 @@ main{
     height: 50px;
     width: 120px;
 }
+
+.subcontainer{
+    margin-bottom: 30px;
+}
+
+.subcontainer__row{
+    width: 300px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid black;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+    padding: 15px 20px;
+
+    &:last-of-type{
+        border-bottom: 1px solid black;
+    }
+}
+
+.subcontainer__row-title{
+    font-weight: bold;
+}
+
+.subcontainer__row-value{
+
+}
