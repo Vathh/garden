@@ -11,6 +11,7 @@
 </head>
 <body>
 <main>
+    <?php include __DIR__ . "/partials/nav.php"; ?>
     <form name="registerForm" class="form" action="/register" method="POST">
         <div class="form__container">
             <h1 class="form__container-header">Register</h1>

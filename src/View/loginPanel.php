@@ -10,6 +10,7 @@
 </head>
 <body>
 <main>
+    <?php include __DIR__ . "/partials/nav.php"; ?>
     <form name="loginForm" class="form" action="/login" method="POST">
         <div class="form__container">
             <h1 class="form__container-header">Sign In</h1>
@@ -23,6 +24,7 @@
             <button class="form__container-btn" type="submit" name="loginBtn">Submit</button>
         </div>
     </form>
+
 </main>
 </body>
 </html>

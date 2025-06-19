@@ -91,3 +91,58 @@ main{
 .subcontainer__row-value{
 
 }
+
+.nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: #1f2937;
+    padding: 10px 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.nav__list {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+}
+
+.nav__list-link {
+    color: #f3f4f6;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: color 0.2s;
+}
+
+.nav__list-link:hover {
+    color: #10b981;
+}
+
+.nav__list svg {
+    width: 20px;
+    height: 20px;
+    margin-right: 0.5rem;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+}
+
+.nav__list-logoutBtn{
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    padding: 0;
+}

@@ -61,6 +61,11 @@ class AuthController
         }
     }
 
+    public function showRegisterForm(): void
+    {
+        require __DIR__ . '/../View/registerForm.php';
+    }
+
     public function register(): void
     {
         if (isset($_POST['register'])) {
