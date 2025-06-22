@@ -10,41 +10,48 @@ main{
     height: 100%;
 }
 
-.form{
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.form__container{
+.loginForm__container{
     display: flex;
     width: 300px;
     flex-direction: column;
 }
 
-.form__container-header{
+.loginForm__container-header{
     text-align: center;
     color:red;
     margin-bottom: 10px;
 }
 
-.form__container-label{
+.loginForm__container-label{
     padding-bottom: 5px;
 }
 
-.form__container-input{
+.loginForm__container-input{
     margin-bottom: 15px;
 }
 
-.form__container-info{
+.loginForm__container-info{
     font-size: 12px;
 }
 
-.form__container-btn{
+.loginForm__container-btn{
     margin-top: 20px;
+    cursor: pointer;
+}
+
+.loginForm__question{
+    font-size: 14px;
+}
+
+.loginForm__link{
+    font-size: 14px;
+    color: red;
+    transition: color .3s;
+    cursor: pointer;
+
+    &:hover{
+        color: #10b981;
+    }
 }
 
 .container{
@@ -90,4 +97,114 @@ main{
 
 .subcontainer__row-value{
 
+}
+
+.nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: #1f2937;
+    padding: 10px 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.nav__list {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+}
+
+.nav__list-link {
+    color: #f3f4f6;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: color 0.3s;
+
+    &:hover{
+        color: #10b981;
+    }
+}
+
+.nav__list svg {
+    width: 20px;
+    height: 20px;
+    margin-right: 0.5rem;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+}
+
+.nav__list-logoutBtn{
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    padding: 0;
+}
+
+.nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: #1f2937;
+    padding: 10px 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.nav__list {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+}
+
+.nav__list-link {
+    color: #f3f4f6;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: color 0.2s;
+}
+
+.nav__list-link:hover {
+    color: #10b981;
+}
+
+.nav__list svg {
+    width: 20px;
+    height: 20px;
+    margin-right: 0.5rem;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+}
+
+.nav__list-logoutBtn{
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    padding: 0;
 }

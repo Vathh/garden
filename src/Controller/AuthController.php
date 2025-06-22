@@ -23,17 +23,24 @@ class AuthController
 
     public function showLoginForm(): void
     {
-
-        if (isset($_GET['msg']) && $_GET['msg'] == "password_changed") {
-            echo "<script>alert('Hasło zostało pomyślnie zmienione. Zaloguj się ponownie.');</script>";
-        }
-
-        if (isset($_GET['msg']) && $_GET['msg'] == "inactive") {
-            echo "<script>alert('Sesja wygasła. Zaloguj się ponownie.');</script>";
-        }
-
-        if (isset($_GET['msg']) && $_GET['msg'] == "activation") {
-            echo "<script>alert('Konto nieaktywne. Sprawdź pocztę.');</script>";
+        if (isset($_GET['msg'])) {
+            switch ($_GET['msg']) {
+                case "password_changed":
+                    echo "<script>alert('Hasło zostało pomyślnie zmienione. Zaloguj się ponownie.');</script>";
+                    break;
+                case "inactive":
+                    echo "<script>alert('Sesja wygasła. Zaloguj się ponownie.');</script>";
+                    break;
+                case "activation":
+                    echo "<script>alert('Konto nieaktywne. Sprawdź pocztę.');</script>";
+                    break;
+                case "user_added":
+                    echo "<script>alert('Pomyślnie dodano użytkownika. Potwierdź rejestrację klikając w link aktywacyjny wysłany na podany adres email.');</script>";
+                    break;
+                case "wrong_password":
+                    echo "<script>alert('Nieprawidłowy login lub hasło. Spróbuj ponownie.');</script>";
+                    break;
+            }
         }
 
         require __DIR__ . '/../View/loginPanel.php';
@@ -56,7 +63,8 @@ class AuthController
                 header("Location: / ");
                 exit;
             } else {
-                echo "Nieprawidłowy login lub hasło.";
+                header("Location: /login?msg=wrong_password");
+                exit;
             }
         }
     }
@@ -81,17 +89,20 @@ class AuthController
                 preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/', $password)
             ) {
                 try {
+                    $passwordHash = password_hash($password, PASSWORD_DEFAULT);
                     $token = bin2hex(random_bytes(32));
                     $createdAt = date('Y-m-d H:i:s');
                     $link = "http://localhost:8000/activate?token=$token";
                     $message = "Kliknij w link aby aktywowac konto: \n\n$link";
-                    mail($email, "Aktywacja konta Garden", $message, "From: no-reply@garden.pl");
 
                     $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-                    $stmt = $this->conn->prepare("INSERT INTO users (login, email, password, activation_token, activation_token_created_at, confirmed) VALUES (?, ?, ?, ?, ?, ?)");
+                    $stmt = $this->conn->prepare("INSERT INTO users (login, email, password, role_id, activation_token, activation_token_created_at, confirmed) VALUES (?, ?, ?, ?, ?, ?, ?)");
 
-                    $stmt->execute([$login, $email, $password, $token, $createdAt, 0]);
+                    $stmt->execute([$login, $email, $passwordHash, 1, $token, $createdAt, 0]);
+
+                    mail($email, "Aktywacja konta Garden", $message, "From: no-reply@garden.pl");
+                    header('Location:/login?msg=user_added');
                 } catch (PDOException $e) {
                     if ($e->getCode() == "23000") {
                         echo"<script>alert('Użytkownik o podanym loginie lub emailu już istnieje.');</script><script>window.location='/register'</script>)";
@@ -99,7 +110,6 @@ class AuthController
                         echo $e->getMessage();
                     }
                     $conn = null;
-                    header('Location:/login?msg=user_added');
                 }
             } else {
                 echo"<script>alert('Coś poszło nie tak, spróbuj ponownie');</script>)<script>window.location='/register'</script>";
@@ -170,16 +180,17 @@ class AuthController
         }
 
         try {
+            $newPasswordHash = password_hash($newPassword, PASSWORD_DEFAULT);
             $stmt = $this->conn->prepare("SELECT password FROM users WHERE id = ?");
             $stmt->execute([$userId]);
             $user = $stmt->fetch();
 
-            if (!$user || $oldPassword !== $user['password']) {
+            if (!$user || password_verify($oldPassword, $user['password'])) {
                 die("Nieprawidłowe stare hasło.");
             }
 
             $stmt = $this->conn->prepare("UPDATE users SET password = ? WHERE id = ?");
-            $stmt->execute([$newPassword, $userId]);
+            $stmt->execute([$newPasswordHash, $userId]);
 
             session_unset();
             session_destroy();
@@ -220,12 +231,13 @@ class AuthController
         $user = $response[0];
 
         if (!$user['confirmed']) {
-            echo "Konto nieaktywne. Sprawdź pocztę.";
+            header("Location: /login?msg=activation");
             exit;
         }
 
-        if ($password !== $user['password']) {
-            return null;
+        if (!password_verify($password, $user['password'])) {
+            header("Location: /login?msg=wrong_password");
+            exit;
         }
 
         $permissions = [];

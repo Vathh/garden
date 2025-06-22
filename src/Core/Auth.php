@@ -33,4 +33,9 @@ class Auth
             session_start();
         }
     }
+
+    public static function isLoggedIn(): bool
+    {
+        return isset($_SESSION['user']);
+    }
 }

@@ -11,25 +11,27 @@
 </head>
 <body>
 <main>
-    <form name="registerForm" class="form" action="/register" method="POST">
-        <div class="form__container">
-            <h1 class="form__container-header">Register</h1>
+    <div class="container">
+        <form name="registerForm" class="loginForm" action="/register" method="POST">
+            <div class="loginForm__container">
+                <h1 class="loginForm__container-header">Register</h1>
 
-            <label class="form__container-label" for="login"><b>Login</b></label>
-            <input class="form__container-input" type="text" placeholder="Enter Login" name="login" id="login" required>
+                <label class="loginForm__container-label" for="login"><b>Login</b></label>
+                <input class="loginForm__container-input" type="text" placeholder="Wprowadź login" name="login" id="login" required>
 
-            <label class="form__container-label" for="email"><b>Email</b></label>
-            <input class="form__container-input" type="text" placeholder="Enter Email" name="email" id="email" required>
+                <label class="loginForm__container-label" for="email"><b>Email</b></label>
+                <input class="loginForm__container-input" type="text" placeholder="Wprowadź adres e-mail" name="email" id="email" required>
 
-            <label class="form__container-label" for="password"><b>Password</b></label>
-            <input class="form__container-input" type="password" placeholder="Enter Password" name="password" id="password" required>
+                <label class="loginForm__container-label" for="password"><b>Hasło</b></label>
+                <input class="loginForm__container-input" type="password" placeholder="Wprowadź hasło" name="password" id="password" required>
 
-            <label class="form__container-label" for="passwordRepeat"><b>Repeat Password</b></label>
-            <input class="form__container-input" type="password" placeholder="Repeat Password" name="passwordRepeat" id="passwordRepeat" required>
+                <label class="loginForm__container-label" for="passwordRepeat"><b>Powtórz hasło</b></label>
+                <input class="loginForm__container-input" type="password" placeholder="Powtórz hasło" name="passwordRepeat" id="passwordRepeat" required>
 
-            <button class="form__container-btn" type="submit" name="register">Log In</button>
-        </div>
-    </form>
+                <button class="loginForm__container-btn" type="submit" name="register">Log In</button>
+            </div>
+        </form>
+    </div>
 </main>
 </body>
 </html>

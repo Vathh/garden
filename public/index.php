@@ -22,7 +22,7 @@ $router->post('/changePassword', [AuthController::class, 'changePassword']);
 
 $router->post('/logout', [AuthController::class, 'logout']);
 
-$router->post('/activate', [AuthController::class, 'activate']);
+$router->get('/activate', [AuthController::class, 'activate']);
 
 $router->post('/register', [AuthController::class, 'register']);
 
