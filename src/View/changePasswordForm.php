@@ -10,6 +10,7 @@
 </head>
 <body>
 <main>
+    <?php include __DIR__ . "/partials/nav.php"; ?>
     <form name="changePasswordForm" class="form" action="/changePassword" method="POST">
         <div class="form__container">
             <h1 class="form__container-header">Change Password</h1>

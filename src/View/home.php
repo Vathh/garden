@@ -11,20 +11,9 @@
 </head>
 <body>
 <main>
+    <?php include __DIR__ . "/partials/nav.php"; ?>
     <div class="container">
         <h1>Witaj!</h1>
-
-        <form action="/zones" method="GET" class="container__button">
-            <button type="submit" class="container__button-btn">Strefy</button>
-        </form>
-
-        <form action="/changePassword" method="GET" class="container__button">
-            <button type="submit" class="container__button-btn">Zmień hasło</button>
-        </form>
-
-        <form action="/logout" method="POST" class="container__button">
-            <button type="submit" class="container__button-btn">Wyloguj się</button>
-        </form>
     </div>
 </main>
 </body>

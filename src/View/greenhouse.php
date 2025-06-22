@@ -10,6 +10,7 @@
 </head>
 <body>
 <main>
+    <?php include __DIR__ . "/partials/nav.php"; ?>
     <div class="container">
         <div class="subcontainer">
             <div class="subcontainer__row">
