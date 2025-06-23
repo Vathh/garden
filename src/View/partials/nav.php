@@ -1,5 +1,7 @@
 <?php
 
+use App\Core\Auth;
+
 include __DIR__ . "/icons.php"; ?>
 
 <nav class="nav">
@@ -19,6 +21,7 @@ include __DIR__ . "/icons.php"; ?>
                 <svg><use xlink:href="#account" /></svg> Moje konto
             </a>
         </li>
+        <?php if (Auth::isLoggedIn()) : ?>
         <li class="nav__list-item">
             <form action="/logout" method="POST" class="nav__list-link">
                 <button type="submit" class="nav__list-logoutBtn">
@@ -26,5 +29,12 @@ include __DIR__ . "/icons.php"; ?>
                 </button>
             </form>
         </li>
+        <?php else : ?>
+        <li class="nav__list-item">
+            <a href="/login" class="nav__list-link">
+                <svg><use xlink:href="#login" /></svg> Zaloguj się
+            </a>
+        </li>
+        <?php endif; ?>
     </ul>
 </nav>
