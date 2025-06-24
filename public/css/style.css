@@ -1,8 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import "home.css";
+
 body, html {
     height: 100%;
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
 }
 
 main{
@@ -12,22 +17,29 @@ main{
 
 .loginForm__container{
     display: flex;
-    width: 300px;
+    width: 500px;
     flex-direction: column;
 }
 
 .loginForm__container-header{
     text-align: center;
-    color:red;
+    color:black;
     margin-bottom: 10px;
+    font-size: 30px;
 }
 
 .loginForm__container-label{
     padding-bottom: 5px;
+    font-size: 16px;
 }
 
 .loginForm__container-input{
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    border: none;
+    background: #ededed;
+    padding: 15px;
+    border-radius: 5px;
+    font-size: 16px;
 }
 
 .loginForm__container-info{
@@ -35,8 +47,22 @@ main{
 }
 
 .loginForm__container-btn{
-    margin-top: 20px;
+    font-size: 18px;
+    margin-top: 10px;
     cursor: pointer;
+    padding: 15px;
+    border-radius: 5px;
+    border: 2px solid transparent;
+    color: #fff;
+    background-color: #008ce3;
+    transition: color .3s, background-color .3s;
+    font-weight: bold;
+
+    &:hover{
+        color: #008ce3;
+        background-color: #fff;
+        border: 2px solid #008ce3;
+    }
 }
 
 .loginForm__question{
@@ -44,10 +70,10 @@ main{
 }
 
 .loginForm__link{
-    font-size: 14px;
-    color: red;
+    font-size: 16px;
     transition: color .3s;
     cursor: pointer;
+    text-decoration: none;
 
     &:hover{
         color: #10b981;
@@ -103,7 +129,7 @@ main{
     position: fixed;
     top: 0;
     width: 100%;
-    background-color: #1f2937;
+    background-color: #fff;
     padding: 10px 0;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     display: flex;
@@ -119,13 +145,34 @@ main{
     padding: 0;
 }
 
+.nav__list-logo{
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-size: 18px;
+
+    &::after{
+        content: '';
+        position: relative;
+        width: 2px;
+        background-color: #000;
+        height: 25px;
+        right: -15px;
+    }
+}
+
+.nav__list-item{
+    display: flex;
+    align-items: center;
+}
+
 .nav__list-link {
-    color: #f3f4f6;
+    color: #000;
     text-decoration: none;
     display: flex;
     align-items: center;
     font-weight: 500;
-    font-size: 1rem;
+    font-size: 16px;
     transition: color 0.2s;
 }
 

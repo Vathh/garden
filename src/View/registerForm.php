@@ -15,7 +15,7 @@
     <div class="container">
         <form name="registerForm" class="loginForm" action="/register" method="POST">
             <div class="loginForm__container">
-                <h1 class="loginForm__container-header">Register</h1>
+                <h1 class="loginForm__container-header">Rejestracja</h1>
 
                 <label class="loginForm__container-label" for="login"><b>Login</b></label>
                 <input class="loginForm__container-input" type="text" placeholder="Wprowadź login" name="login" id="login" required>
@@ -29,9 +29,10 @@
                 <label class="loginForm__container-label" for="passwordRepeat"><b>Powtórz hasło</b></label>
                 <input class="loginForm__container-input" type="password" placeholder="Powtórz hasło" name="passwordRepeat" id="passwordRepeat" required>
 
-                <button class="loginForm__container-btn" type="submit" name="register">Log In</button>
+                <button class="loginForm__container-btn" type="submit" name="register">Stwórz konto</button>
             </div>
         </form>
+        <p class="loginForm__question">Masz już konto? <a href="/login" class="loginForm__link">Zaloguj się</a></p>
     </div>
 </main>
 </body>

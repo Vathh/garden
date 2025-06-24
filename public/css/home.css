@@ -1,0 +1,15 @@
+.header__container{
+    min-width: 1000px;
+}
+
+.header__container-title{
+    font-size: 34px;
+}
+
+.header__container-comment{
+    color: #555555;
+}
+
+.wrapper{
+
+}

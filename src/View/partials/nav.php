@@ -7,6 +7,12 @@ include __DIR__ . "/icons.php"; ?>
 <nav class="nav">
     <ul class="nav__list">
         <li class="nav__list-item">
+            <span class="nav__list-logo">
+                <svg><use xlink:href="#logo" /></svg> Garden Manager
+            </span>
+        </li>
+        <?php if (Auth::isLoggedIn()) : ?>
+        <li class="nav__list-item">
             <a href="/" class="nav__list-link">
                 <svg><use xlink:href="#home" /></svg> Strona główna
             </a>
@@ -21,7 +27,7 @@ include __DIR__ . "/icons.php"; ?>
                 <svg><use xlink:href="#account" /></svg> Moje konto
             </a>
         </li>
-        <?php if (Auth::isLoggedIn()) : ?>
+
         <li class="nav__list-item">
             <form action="/logout" method="POST" class="nav__list-link">
                 <button type="submit" class="nav__list-logoutBtn">
@@ -31,8 +37,8 @@ include __DIR__ . "/icons.php"; ?>
         </li>
         <?php else : ?>
         <li class="nav__list-item">
-            <a href="/login" class="nav__list-link">
-                <svg><use xlink:href="#login" /></svg> Zaloguj się
+            <a href="/register" class="nav__list-link">
+                <svg><use xlink:href="#register" /></svg> Zarejestruj się
             </a>
         </li>
         <?php endif; ?>

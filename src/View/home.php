@@ -13,7 +13,68 @@
 <main>
     <?php include __DIR__ . "/partials/nav.php"; ?>
     <div class="container">
-        <h1>Witaj!</h1>
+        <div class="header__container">
+            <h1 class="header__container-title">Mój ogród</h1>
+            <p class="header__container-comment">Witaj ponownie Konradzie! Twój ogród ma się świetnie.</p>
+        </div>
+
+        <div class="overview wrapper">
+            <h2 class="title">Przegląd ogrodu</h2>
+            <div class="overview__container">
+                <div class="overview__container-field">
+                    <span class="overview__container-field-title">Rośliny</span>
+                    <span class="overview__container-field-value">12</span>
+                    <span class="overview__container-field-diff">+2</span>
+                </div>
+                <div class="overview__container-field">
+                    <span class="overview__container-field-title">Zadania</span>
+                    <span class="overview__container-field-value">3</span>
+                    <span class="overview__container-field-diff">-1</span>
+                </div>
+                <div class="overview__container-field">
+                    <span class="overview__container-field-title">Nawadnianie</span>
+                    <span class="overview__container-field-value">2</span>
+                    <span class="overview__container-field-diff">+1</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="sections wrapper">
+            <h2 class="title"></h2>
+            <div class="sections__field">
+                <div class="sections__field-img"></div>
+                <span class="sections__field-title">Szklarnia</span>
+            </div>
+            <div class="sections__field">
+                <div class="sections__field-img"></div>
+                <span class="sections__field-title">Narzędziownia</span>
+            </div>
+            <div class="sections__field">
+                <div class="sections__field-img"></div>
+                <span class="sections__field-title">Kompost</span>
+            </div>
+            <div class="sections__field">
+                <div class="sections__field-img"></div>
+                <span class="sections__field-title">Grządki</span>
+            </div>
+        </div>
+
+        <div class="tasks wrapper">
+            <h2 class="title">Zadania</h2>
+            <div class="tasks__container">
+                <div class="tasks__container-row">
+                    <div class="tasks__container-row-icon">
+
+                    </div>
+                    <div class="tasks__container-row-description">
+
+                    </div>
+                    <div class="tasks__container-row-deadline">
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </main>
 </body>
