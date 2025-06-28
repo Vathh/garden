@@ -2,7 +2,7 @@
 @import "home.css";
 
 body, html {
-    height: 100%;
+    min-height: 100%;
     margin: 0;
     padding: 0;
     font-family: "Montserrat", sans-serif;

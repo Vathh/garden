@@ -11,5 +11,146 @@
 }
 
 .wrapper{
+    width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.title{
 
 }
+
+.overview{
+
+}
+
+.overview__container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.overview__container-field{
+    flex: 1;
+    border: 1px solid #555555;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+}
+
+.overview__container-field-title{
+    font-weight: 500;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.overview__container-field-value{
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.overview__container-field-diff{
+    font-size: 16px;
+    color: green;
+}
+
+.sections{
+}
+
+.sections__container{
+    display: flex;
+    gap: 15px;
+}
+
+.sections__field{
+    flex: 1;
+}
+
+.sections__field-img{
+    height: 300px;
+    border-radius: 10px;
+    background-position: center;
+    background-size: cover;
+}
+
+.sections__field-title{
+    display: block;
+    width: 100%;
+    font-weight: 600;
+    text-align: center;
+    padding-top: 15px;
+}
+
+.img-one{
+    background-image: url('../images/greenhouse-8727517_1280.jpg');
+}
+
+.img-two{
+    background-image: url('../images/ai-generated-9192552_1280.jpg');
+}
+
+.img-three{
+    background-image: url('../images/food-8294133_1280.jpg');
+}
+
+.img-four{
+    background-image: url('../images/vegetables-861363_1280.jpg');
+}
+
+.tasks{
+
+}
+
+.tasks__container{
+    display: flex;
+    flex-direction: column;
+}
+
+.tasks__container-row{
+    display: flex;
+    margin-bottom: 25px;
+}
+
+.tasks__container-row-icon{
+    background-color: #F1F1F1;
+    border-radius: 5px;
+    padding: 10px;
+
+    svg{
+        width: 30px;
+        height: 30px;
+    }
+}
+
+.tasks__container-row-description{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 20px;
+    flex: 1;
+}
+
+.tasks__container-row-description-subject{
+    font-weight: 600;
+}
+
+.tasks__container-row-description-activity{
+    font-weight: 400;
+    color: #555555;
+}
+
+.tasks__container-row-deadline{
+    display: flex;
+    align-items: center;
+    color: #555555;
+    font-weight: 500;
+}
+
+.tasks__container-row-deadline-value{
+
+}
+

@@ -12,19 +12,31 @@
 <main>
     <?php include __DIR__ . "/partials/nav.php"; ?>
     <div class="container">
-        <div class="subcontainer">
-            <div class="subcontainer__row">
-                <p class="subcontainer__row-title">Temperatura wewnątrz</p>
-                <span class="subcontainer__row-value">45.1</span>
+        <div class="facade">
+            <h1>Szklarnia</h1>
+            <div class="facade__img"></div>
+        </div>
+        <div class="monitoring">
+            <h2 class="title">Monitoring</h2>
+            <div class="monitoring__temps">
+                <div class="monitoring__temps-field">
+                    <span class="monitoring__desc"></span>
+                    <span class="monitoring__value"></span>
+                </div>
+                <div class="monitoring__temps-field">
+                    <span class="monitoring__desc"></span>
+                    <span class="monitoring__value"></span>
+                </div>
             </div>
-            <div class="subcontainer__row">
-                <p class="subcontainer__row-title">Temperatura na zewnątrz</p>
-                <span class="subcontainer__row-value">21.6</span>
+            <div class="monitoring__door">
+                <span class="monitoring__desc"></span>
+                <span class="monitoring__value"></span>
             </div>
         </div>
-        <form action="/zones" method="GET" class="container__button">
-            <button type="submit" class="container__button-btn">Wstecz</button>
-        </form>
+        <div class="controls">
+            <h2 class="title">Sterowanie</h2>
+
+        </div>
     </div>
 </main>
 </body>
