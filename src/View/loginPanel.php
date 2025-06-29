@@ -9,9 +9,9 @@
     <link rel="icon" href="./favicon.ico" type="image/x-icon">
 </head>
 <body>
-<main>
     <?php include __DIR__ . "/partials/nav.php"; ?>
-    <div class="container">
+<main>
+    <div class="container__centered">
         <form name="loginForm" class="form" action="/login" method="POST">
             <div class="loginForm__container">
                 <h1 class="loginForm__container-header">Zaloguj się</h1>

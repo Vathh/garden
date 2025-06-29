@@ -1,0 +1,72 @@
+.facade{
+
+}
+
+.facade__img{
+    width: 1000px;
+    height: 600px;
+    background-image: url("../images/greenhouse-8727517_1280.jpg");
+    background-position: center;
+    border-radius: 15px;
+}
+
+.monitoring{
+    margin-bottom: 20px;
+}
+
+.greenhouse__container{
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.greenhouse__field{
+    flex: 1;
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.greenhouse__field-desc{
+    font-weight: 500;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.greenhouse__field-value{
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.controls{
+    margin-bottom: 20px;
+}
+
+.controls__container{
+    display: flex;
+    justify-content: space-around;
+}
+
+.controls__container-btn{
+    font-size: 16px;
+    cursor: pointer;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    color: #fff;
+    background-color: #008ce3;
+    transition: color .3s, background-color .3s;
+    font-weight: 600;
+
+    &:hover{
+        color: #008ce3;
+        background-color: #fff;
+        border: 1px solid #008ce3;
+    }
+}
+
+.irrigation{
+    margin-bottom: 20px;
+}

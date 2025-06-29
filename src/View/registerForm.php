@@ -12,7 +12,7 @@
 <body>
 <main>
     <?php include __DIR__ . "/partials/nav.php"; ?>
-    <div class="container">
+    <div class="container__centered">
         <form name="registerForm" class="loginForm" action="/register" method="POST">
             <div class="loginForm__container">
                 <h1 class="loginForm__container-header">Rejestracja</h1>

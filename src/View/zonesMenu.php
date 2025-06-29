@@ -11,7 +11,7 @@
 <body>
 <main>
     <?php include __DIR__ . "/partials/nav.php"; ?>
-    <div class="container">
+    <div class="container__centered">
         <h1>Strefy</h1>
         <form action="/zones/greenhouse" method="GET" class="container__button">
             <button type="submit" class="container__button-btn">Szklarnia</button>
