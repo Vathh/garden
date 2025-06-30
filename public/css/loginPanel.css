@@ -1,0 +1,86 @@
+.loginForm__container{
+    display: flex;
+    width: 500px;
+    flex-direction: column;
+}
+
+.loginForm__container-header{
+    text-align: center;
+    color:black;
+    margin-bottom: 10px;
+    font-size: 30px;
+}
+
+.loginForm__container-label{
+    padding-bottom: 5px;
+    font-size: 16px;
+}
+
+.loginForm__container-input{
+    margin-bottom: 20px;
+    border: none;
+    background: #ededed;
+    padding: 15px;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.loginForm__container-info{
+    font-size: 12px;
+}
+
+.loginForm__container-btn{
+    font-size: 18px;
+    margin-top: 10px;
+    cursor: pointer;
+    padding: 15px;
+    border-radius: 5px;
+    border: 2px solid transparent;
+    color: #fff;
+    background-color: #008ce3;
+    transition: color .3s, background-color .3s;
+    font-weight: bold;
+
+    &:hover{
+        color: #008ce3;
+        background-color: #fff;
+        border: 2px solid #008ce3;
+    }
+}
+
+.loginForm__question{
+    font-size: 14px;
+}
+
+.loginForm__link{
+    position: relative;
+    font-size: 16px;
+    text-decoration: none;
+    color: rgb(0,140,255);
+    transition: .3s;
+
+    &:hover{
+        cursor: pointer;
+    }
+
+    &::after, &::before{
+        transition: .3s;
+        content: '';
+        position: absolute;
+        width: 0;
+        bottom: 0;
+        border-bottom: 2px solid rgb(0,140,255);
+    }
+
+    &::after{
+        left: 50%;
+    }
+
+    &::before{
+        right: 50%;
+    }
+
+    &:hover::before, &:hover::after{
+        width: 50%;
+    }
+}
