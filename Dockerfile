@@ -23,6 +23,11 @@ COPY msmtprc /etc/msmtprc
 RUN chmod 600 /etc/msmtprc && chown www-data:www-data /etc/msmtprc
 RUN touch /var/log/msmtp.log && chown www-data:www-data /var/log/msmtp.log
 
+# Dodawanie folderu na cache i uprawnien zapisu - blade
+RUN mkdir -p /var/www/storage/cache \
+  && chown -R www-data:www-data /var/www/storage \
+  && chmod -R 775 /var/www/storage
+
 # Ustawienie ścieżki roboczej
 WORKDIR /var/www
 

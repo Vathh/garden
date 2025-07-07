@@ -1,8 +1,5 @@
-<?php
-
-use App\Core\Auth;
-
-include __DIR__ . "/icons.php"; ?>
+@php use App\Core\Auth; @endphp
+@include('partials.icons')
 
 <nav class="nav">
     <ul class="nav__list">
@@ -11,7 +8,7 @@ include __DIR__ . "/icons.php"; ?>
                 <svg><use xlink:href="#logo" /></svg> Garden Manager
             </span>
         </li>
-        <?php if (Auth::isLoggedIn()) : ?>
+        @if (Auth::isLoggedIn())
         <li class="nav__list-item">
             <a href="/" class="nav__list-link">
                 <svg><use xlink:href="#home" /></svg> Strona główna
@@ -35,12 +32,12 @@ include __DIR__ . "/icons.php"; ?>
                 </button>
             </form>
         </li>
-        <?php else : ?>
+        @else
         <li class="nav__list-item">
             <a href="/register" class="nav__list-link">
                 <svg><use xlink:href="#register" /></svg> Zarejestruj się
             </a>
         </li>
-        <?php endif; ?>
+        @endif
     </ul>
 </nav>

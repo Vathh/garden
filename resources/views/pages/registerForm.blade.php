@@ -1,17 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Register</title>
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="icon" href="./favicon.ico" type="image/x-icon">
-    <script src="/js/registerValidation.js" defer></script>
-</head>
-<body>
-<main>
-    <?php include __DIR__ . "/partials/nav.php"; ?>
+@extends('layouts.app')
+
+@section('title', 'Rejestracja')
+
+@section('content')
     <div class="container__centered">
         <form name="registerForm" class="loginForm" action="/register" method="POST">
             <div class="loginForm__container">
@@ -34,6 +25,4 @@
         </form>
         <p class="loginForm__question">Masz już konto? <a href="/login" class="loginForm__link">Zaloguj się</a></p>
     </div>
-</main>
-</body>
-</html>
+@endsection

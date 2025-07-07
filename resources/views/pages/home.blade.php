@@ -1,18 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Home</title>
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="icon" href="./favicon.ico" type="image/x-icon">
-    <script src="/js/inactiveLogout.js"></script>
-</head>
-<body>
-<main>
-    <?php include __DIR__ . "/partials/nav.php";
-            include __DIR__ . "/partials/icons.php"?>
+@extends('layouts.app')
+
+@include('partials.icons')
+
+@section('title', 'Mój ogród')
+
+@section('content')
     <div class="container">
         <div class="header__container">
             <h1 class="header__container-title">Mój ogród</h1>
@@ -104,6 +96,4 @@
             </div>
         </div>
     </div>
-</main>
-</body>
-</html>
+@endsection

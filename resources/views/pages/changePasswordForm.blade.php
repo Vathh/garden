@@ -1,16 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Change Password</title>
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="icon" href="./favicon.ico" type="image/x-icon">
-</head>
-<body>
-<main>
-    <?php include __DIR__ . "/partials/nav.php"; ?>
+@extends('layouts.app')
+
+@section('title', 'Zmiana hasła')
+
+@section('content')
     <form name="changePasswordForm" class="form" action="/changePassword" method="POST">
         <div class="form__container">
             <h1 class="form__container-header">Change Password</h1>
@@ -30,6 +22,4 @@
             <button class="form__container-btn" type="submit" name="change_password">Submit</button>
         </div>
     </form>
-</main>
-</body>
-</html>
+@endsection

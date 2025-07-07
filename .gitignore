@@ -1,2 +1,5 @@
 .idea/
 /vendor/
+
+/storage/cache/*
+!storage/cache/.gitkeep

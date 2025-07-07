@@ -1,16 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Greenhouse</title>
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="icon" href="./favicon.ico" type="image/x-icon">
-</head>
-<body>
-<main>
-    <?php include __DIR__ . "/partials/nav.php"; ?>
+@extends('layouts.app')
+
+@section('title', 'Szklarnia')
+
+@section('content')
     <div class="container">
         <div class="facade wrapper">
             <h1>Szklarnia</h1>
@@ -54,6 +46,4 @@
             </div>
         </div>
     </div>
-</main>
-</body>
-</html>
+@endsection

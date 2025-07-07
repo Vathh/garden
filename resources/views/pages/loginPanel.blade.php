@@ -1,16 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Log In</title>
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="icon" href="./favicon.ico" type="image/x-icon">
-</head>
-<body>
-    <?php include __DIR__ . "/partials/nav.php"; ?>
-<main>
+@extends('layouts.app')
+
+@section('title', 'Logowanie')
+
+@section('content')
     <div class="container__centered">
         <form name="loginForm" class="form" action="/login" method="POST">
             <div class="loginForm__container">
@@ -27,6 +19,4 @@
         </form>
         <p class="loginForm__question">Nie masz jeszcze konta? <a href="/register" class="loginForm__link">Zarejestruj się</a></p>
     </div>
-</main>
-</body>
-</html>
+@endsection
