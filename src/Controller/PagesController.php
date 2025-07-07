@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Core\Auth;
+use App\Core\View;
 
 class PagesController
 {
@@ -10,13 +11,13 @@ class PagesController
     {
         Auth::requireAuth();
 
-        require_once __DIR__ . "/../View/home.php";
+        View::render('pages.home');
     }
 
     public function showAccountMenuPage(): void
     {
         Auth::requireAuth();
 
-        require_once __DIR__ . "/../View/accountMenu.php";
+        View::render('pages.accountMenu');
     }
 }

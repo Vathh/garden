@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Core\Auth;
+use App\Core\View;
 
 class ZonesController
 {
@@ -10,20 +11,20 @@ class ZonesController
     {
         Auth::requireAuth();
 
-        require_once __DIR__ . "/../View/zonesMenu.php";
+        View::render('pages.zonesMenu');
     }
 
     public function showGreenHousePage(): void
     {
         Auth::requireAuth();
 
-        require_once __DIR__ . "/../View/greenHouse.php";
+        View::render('pages.greenhouse');
     }
 
     public function showToolroomPage(): void
     {
         Auth::requireAuth();
 
-        require_once __DIR__ . "/../View/toolroom.php";
+        View::render('pages.toolroom');
     }
 }

@@ -12,7 +12,7 @@ class View
         if (self::$blade === null) {
             $views = dirname(__DIR__, 2) . '/resources/views';
             $cache = dirname(__DIR__, 2) . '/storage/cache';
-            self::$blade = new Blade($views, $cache);
+            self::$blade = new Blade([$views], $cache);
         }
 
         echo self::$blade->make($template, $data)->render();

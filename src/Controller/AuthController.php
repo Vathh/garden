@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Core\Auth;
 use App\Core\Database;
+use App\Core\View;
 use App\Model\Role;
 use App\Model\User;
 use DateTime;
@@ -43,7 +44,7 @@ class AuthController
             }
         }
 
-        require __DIR__ . '/../View/loginPanel.php';
+        View::render('pages.loginPanel');
     }
 
     public function login(): void
@@ -166,7 +167,7 @@ class AuthController
 
     public function showChangePasswordForm(): void
     {
-        require __DIR__ . '/../View/changePasswordForm.php';
+        View::render('pages.changePasswordForm');
     }
 
     public function changePassword(): void
