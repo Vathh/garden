@@ -108,7 +108,7 @@ class AuthController
 
                     mail($email, "Aktywacja konta Garden", $message, "From: no-reply@garden.pl");
                     header('Location:/login?msg=user_added');
-                } catch (PDOException $e) {
+                } catch (Exception $e) {
                     if ($e->getCode() == "23000") {
                         echo"<script>alert('Użytkownik o podanym loginie lub emailu już istnieje.');</script><script>window.location='/register'</script>)";
                     } else {
