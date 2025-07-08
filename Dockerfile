@@ -13,7 +13,7 @@ RUN pecl install xdebug && docker-php-ext-enable xdebug
 
 # msmtp
 RUN apt-get update && \
-    apt-get install -y unzip zip git msmtp ca-certificates && \
+    apt-get install -y unzip zip git msmtp ca-certificates openssl && \
     rm -rf /var/lib/apt/lists/*
 
 # Konfiguracja Xdebug, maila i PHP

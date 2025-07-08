@@ -22,6 +22,9 @@ class AuthController
         $this->conn = Database::getInstance()->getConnection();
     }
 
+    /**
+     * @throws Exception
+     */
     public function showLoginForm(): void
     {
         if (isset($_GET['msg'])) {
@@ -70,9 +73,12 @@ class AuthController
         }
     }
 
+    /**
+     * @throws Exception
+     */
     public function showRegisterForm(): void
     {
-        require __DIR__ . '/../View/registerForm.php';
+        View::render('pages.registerForm');
     }
 
     public function register(): void
