@@ -7,6 +7,7 @@ use App\Core\Database;
 use App\Core\View;
 use App\Model\Role;
 use App\Model\User;
+use DateMalformedStringException;
 use DateTime;
 use Exception;
 use JetBrains\PhpStorm\NoReturn;
@@ -22,9 +23,6 @@ class AuthController
         $this->conn = Database::getInstance()->getConnection();
     }
 
-    /**
-     * @throws Exception
-     */
     public function showLoginForm(): void
     {
         if (isset($_GET['msg'])) {
@@ -47,7 +45,11 @@ class AuthController
             }
         }
 
-        View::render('pages.loginPanel');
+        try {
+            View::render('pages.loginPanel');
+        } catch (Exception $e) {
+            echo "Błąd: " . $e->getMessage();
+        }
     }
 
     public function login(): void
@@ -58,7 +60,7 @@ class AuthController
             $user = $this->attemptLogin($_POST['login'], $_POST['password']);
 
             if ($user) {
-                if (!$user->confirmed) {
+                if (!$user->isConfirmed()) {
                     header("Location: /login?msg=activation");
                     exit;
                 }
@@ -73,12 +75,13 @@ class AuthController
         }
     }
 
-    /**
-     * @throws Exception
-     */
     public function showRegisterForm(): void
     {
-        View::render('pages.registerForm');
+        try {
+            View::render('pages.registerForm');
+        } catch (Exception $e) {
+            echo "Błąd: " . $e->getMessage();
+        }
     }
 
     public function register(): void
@@ -88,8 +91,7 @@ class AuthController
             $email = $_POST['email'];
             $password = $_POST['password'];
             $passwordRepeat = $_POST['passwordRepeat'];
-            if (
-                $login != "" &&
+            if ($login != "" &&
                 strlen($login) >= 5 &&
                 preg_match('/^[a-zA-Z0-9]+$/', $login) &&
                 $email != "" &&
@@ -129,9 +131,6 @@ class AuthController
         }
     }
 
-    /**
-     * @throws Exception
-     */
     public function activate(): void
     {
         $token = $_GET['token'] ?? '';
@@ -142,7 +141,11 @@ class AuthController
             $user = $stmt->fetch();
 
             if ($user && !$user['confirmed']) {
-                $createdAt = new DateTime($user['activation_token_created_at']);
+                try {
+                    $createdAt = new DateTime($user['activation_token_created_at']);
+                } catch (DateMalformedStringException $e) {
+                    echo "Błąd: " . $e->getMessage();
+                }
                 $now = new DateTime();
                 $interval = $createdAt->diff($now);
 
@@ -173,7 +176,11 @@ class AuthController
 
     public function showChangePasswordForm(): void
     {
-        View::render('pages.changePasswordForm');
+        try {
+            View::render('pages.changePasswordForm');
+        } catch (Exception $e) {
+            echo "Błąd: " . $e->getMessage();
+        }
     }
 
     public function changePassword(): void
@@ -259,18 +266,16 @@ class AuthController
             }
         }
 
-        $role = new Role([
-            'id' => $user['role_id'],
-            'name' => $user['role_name'],
-            'permissions' => $permissions
-        ]);
+        $role = (new Role())
+                    ->setId($user['role_id'])
+                    ->setName($user['role_name'])
+                    ->setPermissions($permissions);
 
-        return new User([
-            'id' => $user['user_id'],
-            'login' => $user['login'],
-            'email' => $user['email'],
-            'confirmed' => $user['confirmed'],
-            'role' => $role
-        ]);
+        return (new User())
+                    ->setId($user['user_id'])
+                    ->setLogin($user['login'])
+                    ->setEmail($user['email'])
+                    ->setConfirmed($user['confirmed'])
+                    ->setRole($role);
     }
 }

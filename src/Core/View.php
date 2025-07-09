@@ -2,7 +2,6 @@
 namespace App\Core;
 
 use eftec\bladeone\BladeOne;
-use Jenssegers\Blade\Blade;
 
 class View
 {

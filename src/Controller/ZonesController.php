@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Core\Auth;
 use App\Core\View;
+use Exception;
 
 class ZonesController
 {
@@ -11,20 +12,32 @@ class ZonesController
     {
         Auth::requireAuth();
 
-        View::render('pages.zonesMenu');
+        try {
+            View::render('pages.zonesMenu');
+        } catch (Exception $e) {
+            echo "Błąd: " . $e->getMessage();
+        }
     }
 
     public function showGreenHousePage(): void
     {
         Auth::requireAuth();
 
-        View::render('pages.greenhouse');
+        try {
+            View::render('pages.greenhouse');
+        } catch (Exception $e) {
+            echo "Błąd: " . $e->getMessage();
+        }
     }
 
     public function showToolroomPage(): void
     {
         Auth::requireAuth();
 
-        View::render('pages.toolroom');
+        try {
+            View::render('pages.toolroom');
+        } catch (Exception $e) {
+            echo "Błąd: " . $e->getMessage();
+        }
     }
 }
