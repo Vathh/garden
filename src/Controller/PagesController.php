@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Core\Auth;
 use App\Core\View;
+use Exception;
 
 class PagesController
 {
@@ -11,13 +12,21 @@ class PagesController
     {
         Auth::requireAuth();
 
-        View::render('pages.home');
+        try {
+            View::render('pages.home');
+        } catch (Exception $e) {
+            echo "Błąd: " . $e->getMessage();
+        }
     }
 
     public function showAccountMenuPage(): void
     {
         Auth::requireAuth();
 
-        View::render('pages.accountMenu');
+        try {
+            View::render('pages.accountMenu');
+        } catch (Exception $e) {
+            echo "Błąd: " . $e->getMessage();
+        }
     }
 }

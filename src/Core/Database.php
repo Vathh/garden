@@ -7,8 +7,8 @@ use PDOException;
 
 class Database
 {
-    private static $instance = null;
-    private $connection;
+    private static ?Database $instance = null;
+    private PDO $connection;
 
     private function __construct()
     {
@@ -21,7 +21,7 @@ class Database
         try {
             $this->connection = new PDO(
                 "mysql:host=$db_host;
-                                            dbname=$db_name",
+                dbname=$db_name",
                 $db_username,
                 $db_password
             );
