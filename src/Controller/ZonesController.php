@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Core\Auth;
 use App\Core\View;
+use App\Service\TemperatureFetcher;
 use Exception;
 
 class ZonesController
@@ -23,8 +24,14 @@ class ZonesController
     {
         Auth::requireAuth();
 
+        $temperatureFetcher = new TemperatureFetcher();
+
+        $internalTemperature = $temperatureFetcher->fetch();
+
         try {
-            View::render('pages.greenhouse');
+            View::render('pages.greenhouse', [
+                'internalTemperature' => $internalTemperature
+            ]);
         } catch (Exception $e) {
             echo "Błąd: " . $e->getMessage();
         }
