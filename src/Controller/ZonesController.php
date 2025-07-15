@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Core\Auth;
 use App\Core\View;
-use App\Service\TemperatureFetcher;
+use App\Service\TemperatureService;
 use Exception;
 
 class ZonesController
@@ -24,7 +24,7 @@ class ZonesController
     {
         Auth::requireAuth();
 
-        $temperatureFetcher = new TemperatureFetcher();
+        $temperatureFetcher = new TemperatureService();
 
         $internalTemperature = $temperatureFetcher->fetch();
 

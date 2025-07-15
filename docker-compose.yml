@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: /Dockerfile
+    command: bash -c "service cron start && apache2-foreground"
     container_name: php_83_app
     volumes:
       - .:/var/www

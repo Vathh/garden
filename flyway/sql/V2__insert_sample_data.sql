@@ -14,4 +14,4 @@ INSERT INTO role_permission (role_id, permission_id) VALUES
 
 INSERT INTO users (login, email, password, role_id, confirmed) VALUES
 ('ciasto', 'ciasto@ciasto.com', 'ciasto123', 1, true),
-('marian', 'ciasto@ciasto.com', '$2y$10$Ds.EM7Qu7rkZjWedMqNSZ.UJTOf9/lD4/mJ1rLTtdhKm0ddeYQl6i', 1, true);
+('marian', 'ciasto1@ciasto.com', '$2y$10$Ds.EM7Qu7rkZjWedMqNSZ.UJTOf9/lD4/mJ1rLTtdhKm0ddeYQl6i', 1, true);

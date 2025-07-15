@@ -16,6 +16,12 @@ RUN apt-get update && \
     apt-get install -y unzip zip git msmtp ca-certificates openssl && \
     rm -rf /var/lib/apt/lists/*
 
+# cron
+RUN apt-get update && \
+    apt-get install -y cron && \
+    echo "* * * * * www-data php /var/www/html/scripts/temperature_daemon.php >> /var/log/cron.log 2>&1" > /etc/cron.d/temperature_daemon && \
+    chmod 0644 /etc/cron.d/temperature_daemon
+
 # Konfiguracja Xdebug, maila i PHP
 COPY ./docker/php/conf.d/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 COPY php.ini /usr/local/etc/php/php.ini
