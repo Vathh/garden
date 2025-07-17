@@ -45,9 +45,11 @@
     text-decoration: none;
     display: flex;
     align-items: center;
+    justify-content: center;
     font-weight: 500;
     font-size: 16px;
     transition: color 0.2s;
+    margin-bottom: 0;
 }
 
 .nav__list-link:hover {

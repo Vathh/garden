@@ -12,15 +12,16 @@ class Database
 
     private function __construct()
     {
-        $db_host = "mysql_db";
+        $db_host = "127.0.0.1";
         $db_name = "garden";
         $db_port = "3306";
-        $db_username = 'user';
-        $db_password = 'secret';
+        $db_username = 'root';
+        $db_password = '';
 
         try {
             $this->connection = new PDO(
                 "mysql:host=$db_host;
+                port=$db_port;
                 dbname=$db_name",
                 $db_username,
                 $db_password

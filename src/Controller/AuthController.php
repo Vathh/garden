@@ -31,6 +31,8 @@ class AuthController
                     echo "<script>alert('Hasło zostało pomyślnie zmienione. Zaloguj się ponownie.');</script>";
                     break;
                 case "inactive":
+                    session_unset();
+                    session_destroy();
                     echo "<script>alert('Sesja wygasła. Zaloguj się ponownie.');</script>";
                     break;
                 case "activation":
