@@ -11,7 +11,7 @@
             <p class="header__container-comment">Witaj ponownie Konradzie! Twój ogród ma się świetnie.</p>
         </div>
 
-        <div class="overview wrapper">
+        <div class="monitoring wrapper">
             <h2 class="title">Przegląd ogrodu</h2>
             <div class="overview__container">
                 <div class="overview__container-field">

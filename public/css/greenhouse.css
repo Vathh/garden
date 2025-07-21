@@ -1,13 +1,59 @@
 .facade{
-
+    border-bottom: 1px solid #dddddd;
+    margin-bottom: 40px;
 }
 
-.facade__img{
+.monitoring__img{
     width: 1000px;
     height: 600px;
     background-image: url("../images/greenhouse-8727517_1280.jpg");
     background-position: center;
     border-radius: 15px;
+}
+
+.componentSelect{
+    display: flex;
+    align-self: start;
+    margin-bottom: 15px;
+}
+
+.componentSelect__btn{
+    position: relative;
+    border: none;
+    text-decoration: none;
+    font-size: 16px;
+    background-color: transparent;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: transform .3s;
+
+    &:after{
+        display: none;
+        content: '';
+        position: absolute;
+        bottom: -15px;
+        left: 0;
+        height: 2px;
+        width: 100%;
+        background-color: black;
+        transition: bottom .3s;
+    }
+
+    &:hover{
+        transform: scale(1.1);
+
+        &:after{
+            bottom: -13px;
+        }
+    }
+}
+
+.selectedComponentName{
+    font-weight: bold;
+
+    &:after{
+        display: block;
+    }
 }
 
 .monitoring{
@@ -69,4 +115,8 @@
 
 .irrigation{
     margin-bottom: 20px;
+}
+
+.greenhouseComponentHidden{
+    display: none;
 }

@@ -31,7 +31,7 @@ class TemperatureService
         return (float) $data['temperature'];
     }
 
-    public function readTemperatureAndSaveToDb(): void
+    public function fetchTemperatureAndSaveToDb(): void
     {
         $temperature = $this->fetch();
 

@@ -13,6 +13,9 @@
 <main>
     @include('partials.nav')
     @yield('content')
+
+    @yield('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </main>
 </body>
 </html>

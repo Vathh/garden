@@ -3,6 +3,7 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use App\Controller\ZonesController;
+use App\Controller\TemperatureController;
 use App\Core\Router;
 use App\Controller\AuthController;
 use App\Controller\PagesController;
@@ -32,6 +33,8 @@ $router->get('/zones/greenhouse', [ZonesController::class, 'showGreenHousePage']
 $router->get('/zones/toolroom', [ZonesController::class, 'showToolroomPage']);
 
 $router->get('/account', [PagesController::class, 'showAccountMenuPage']);
+
+$router->get('/temperature', [TemperatureController::class, 'getTemperatureChartData']);
 
 
 echo $router->resolve();

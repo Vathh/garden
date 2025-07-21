@@ -6,4 +6,4 @@ use App\Service\TemperatureService;
 
 $fetcher = new TemperatureService();
 
-$fetcher->readTemperatureAndSaveToDb();
+$fetcher->fetchTemperatureAndSaveToDb();
