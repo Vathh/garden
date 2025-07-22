@@ -2,6 +2,9 @@ let chart;
 
 function loadChart(range)
 {
+    const buttons = document.querySelectorAll('.chartContainer__select-btn');
+    buttons.forEach(btn => btn.classList.remove('selectedRange'));
+    document.getElementById(range + '-btn').classList.add('selectedRange');
     fetch(`/temperature?range=` + range)
         .then(res => res.json())
         .then(data => {
@@ -20,8 +23,8 @@ function loadChart(range)
                     datasets: [{
                         label: 'Temperatura (°C)',
                         data: temps,
-                        borderColor: 'rgb(255, 99, 132)',
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgb(44,44,44)',
+                        backgroundColor: 'rgb(44,44,44)',
                         tension: 0.2
                     }]
                 },

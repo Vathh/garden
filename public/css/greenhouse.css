@@ -120,3 +120,58 @@
 .greenhouseComponentHidden{
     display: none;
 }
+
+.chartContainer{
+    width: 100%;
+}
+
+.chartContainer__header{
+
+}
+
+.chartContainer__select{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.chartContainer__select-btn{
+    position: relative;
+    border: none;
+    text-decoration: none;
+    font-size: 14px;
+    background-color: transparent;
+    cursor: pointer;
+    transition: transform .3s;
+
+    &:after{
+        display: none;
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        height: 2px;
+        width: 30%;
+        background-color: black;
+        transform: translateX(-50%);
+        transition: bottom .3s;
+    }
+
+    &:hover{
+        transform: scale(1.1);
+    }
+}
+
+.selectedRange{
+    font-weight: bold;
+
+    &:after{
+        display: block;
+    }
+}
+
+.chartContainer__chart{
+    border: 1px solid #dddddd;
+    padding: 30px;
+}

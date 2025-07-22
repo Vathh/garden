@@ -17,13 +17,6 @@
             <span class="greenhouse__field-value">Otwarte</span>
         </div>
     </div>
-    <div class="controls wrapper">
-        <h2 class="title">Sterowanie</h2>
-        <div class="controls__container">
-            <button class="controls__container-btn">Włącz przednią wentylację</button>
-            <button class="controls__container-btn">Włącz tylną wentylację</button>
-        </div>
-    </div>
     <div class="irrigation wrapper">
         <h2 class="title">Nawadnianie</h2>
         <div class="greenhouse__container">
