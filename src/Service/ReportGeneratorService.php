@@ -8,6 +8,7 @@ use Exception;
 use PDO;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use QuickChart;
 
 class ReportGeneratorService
 {
@@ -50,7 +51,7 @@ class ReportGeneratorService
                 $i++;
             }
 
-            $sheet->setCellValue('C2', $this->getMeasurementsCount($rows));
+            $sheet->setCellValue('C2', count($rows));
             $sheet->setCellValue('D2', $this->getAverageTemperature($rows));
             $sheet->setCellValue('E2', $this->getHighestTemperature($rows));
             $sheet->setCellValue('F2', $this->getLowestTemperature($rows));
@@ -71,18 +72,9 @@ class ReportGeneratorService
         }
     }
 
-    private function getMeasurementsCount(array $measurements): int
-    {
-        $measurementsCount = 0;
-        foreach ($measurements as $measurement) {
-            $measurementsCount++;
-        }
-        return $measurementsCount;
-    }
-
     private function getAverageTemperature(array $measurements): float
     {
-        $measurementsCount = $this->getMeasurementsCount($measurements);
+        $measurementsCount = count($measurements);
         $temperaturesSum = 0;
         foreach ($measurements as $measurement) {
             $temperaturesSum += $measurement['temperature'];
@@ -174,4 +166,32 @@ class ReportGeneratorService
 
         return $temperaturesGroupedByMonth;
     }
+
+    private function getChartPng(array $measurements)
+    {
+        $char  = new QuickChart();
+
+        $config = <<<EOD
+        {
+            type: 'line',
+            data: {
+                labels: []
+            }
+        }
+        EOD;
+
+    }
+
+//        {type:'line',
+//            data:
+//            {labels:['January','February','March','April','May'],
+//                datasets:[
+//                    {label:'Dogs',
+//                    data:[50,60,70,180,190],
+//                    fill:false,
+//                    borderColor:'blue'},
+//                {label:'Cats',
+//                    data:[100,200,300,400,500],
+//                    fill:false,
+//                    borderColor:'green'}]}}">}
 }

@@ -34,7 +34,7 @@ $router->get('/zones/toolroom', [ZonesController::class, 'showToolroomPage']);
 
 $router->get('/account', [PagesController::class, 'showAccountMenuPage']);
 
-$router->get('/temperature', [TemperatureController::class, 'getTemperatureChartData']);
+$router->get('/temperature', [TemperatureController::class, 'getTemperatureChartDataJson']);
 
 
 echo $router->resolve();

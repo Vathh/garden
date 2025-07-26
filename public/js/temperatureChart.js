@@ -25,7 +25,9 @@ function loadChart(range)
                         data: temps,
                         borderColor: 'rgb(44,44,44)',
                         backgroundColor: 'rgb(44,44,44)',
-                        tension: 0.2
+                        tension: 0.2,
+                        borderWidth: 1,
+                        pointRadius: 1
                     }]
                 },
                 options: {
