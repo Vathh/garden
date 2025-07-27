@@ -5,6 +5,9 @@ namespace App\Service;
 use App\Core\Database;
 use DateTime;
 use Exception;
+use Mpdf\Mpdf;
+use Mpdf\MpdfException;
+use Mpdf\Output\Destination;
 use PDO;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -66,7 +69,7 @@ class ReportGeneratorService
             $writer = new Xlsx($spreadSheet);
             try {
                 $writer->save($savePath);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 echo "Błąd zapisu: " . $e->getMessage();
             }
         }
@@ -167,31 +170,167 @@ class ReportGeneratorService
         return $temperaturesGroupedByMonth;
     }
 
-    private function getChartPng(array $measurements)
+    private function getAggregatedMeasurement(array $measurements): array
     {
-        $char  = new QuickChart();
-
-        $config = <<<EOD
-        {
-            type: 'line',
-            data: {
-                labels: []
-            }
+        if (empty($measurements)) {
+            return ['datetime' => null, 'temperature' => null];
         }
-        EOD;
 
+        $averageDateTime = $measurements[intval(count($measurements) / 2)]['datetime'] ?? null;
+        $averageTemperature = $this->getAverageTemperature($measurements);
+
+        return ['datetime' => $averageDateTime,
+            'temperature' => $averageTemperature];
     }
 
-//        {type:'line',
-//            data:
-//            {labels:['January','February','March','April','May'],
-//                datasets:[
-//                    {label:'Dogs',
-//                    data:[50,60,70,180,190],
-//                    fill:false,
-//                    borderColor:'blue'},
-//                {label:'Cats',
-//                    data:[100,200,300,400,500],
-//                    fill:false,
-//                    borderColor:'green'}]}}">}
+    private function splitMeasurementsIntoSmallerGroups(array $measurements, int $splitArraysGroups): array
+    {
+        $splitArraySize = max(1, (int)floor(count($measurements) / $splitArraysGroups));
+
+        return array_chunk($measurements, $splitArraySize);
+    }
+
+    private function reduceLabels(array $labels, int $reducedLabelsCount): array
+    {
+        $step = intval(count($labels) / $reducedLabelsCount + 1);
+
+        $reducedLabels = [];
+
+        foreach ($labels as $i => $label) {
+            if ($i % $step === 0) {
+                $reducedLabels[] = $label;
+            } else {
+                $reducedLabels[] = '';
+            }
+        }
+
+        return $reducedLabels;
+    }
+
+    private function getChartPng(array $measurements) : string
+    {
+        $aggregatedMeasurements = [];
+
+        $splitMeasurements = $this->splitMeasurementsIntoSmallerGroups($measurements, 200);
+
+        foreach ($splitMeasurements as $chunk) {
+            $aggregatedMeasurements[] = $this->getAggregatedMeasurement($chunk);
+        }
+
+        $labels = array_map(function ($item) {
+            try {
+                $datetime = new DateTime($item);
+            } catch (Exception $e) {
+                echo $e->getMessage();
+            }
+            return $datetime->format('H:i:s') . "\n" . $datetime->format('Y-m-d');
+        }, array_column($aggregatedMeasurements, 'datetime'));
+
+        $reducedLabels = $this->reduceLabels($labels, 5);
+
+        $temperatures = array_column($aggregatedMeasurements, 'temperature');
+
+        $chart = new QuickChart(array(
+            'width' => 1000,
+            'height' => 600,
+        ));
+
+        $chart->setConfig([
+            'type' => 'line',
+            'data' => [
+                'labels' => $reducedLabels,
+                'datasets' => [[
+                    'label' => 'Temperatura',
+                    'data' => $temperatures,
+                    'fill' => 'false',
+                ]]
+            ],
+            'options' => [
+                'responsive' => true,
+                'layout' => [
+                    'padding' => [
+                        'bottom' => 40
+                    ]
+                ],
+                'scales' => [
+                    'x' => [
+                        'ticks' => [
+                            'autoSkip' => true,
+                            'maxTicksLimit' => 20,
+                            'maxRotation' => 0,
+                            'minRotation' => 0,
+                        ]
+                    ]
+                ]
+            ]
+        ]);
+
+        try {
+            return $chart->toBinary();
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+
+        return '';
+    }
+
+    /**
+     * @throws \DateMalformedStringException
+     */
+    private function splitMeasurementsByDatetime(array $measurements): array
+    {
+        $oneDayBack = (new DateTime())->modify('-1 day');
+        $oneWeekBack = (new DateTime())->modify('-7 days');
+        $oneMonthBack = (new DateTime())->modify('-1 month');
+
+        $lastDayMeasurements = [];
+        $lastWeekMeasurements = [];
+        $lastMonthMeasurements = [];
+
+        foreach ($measurements as $measurement) {
+            $measurementDateTime = new DateTime($measurement['datetime']);
+
+            if ($measurementDateTime >= $oneMonthBack) {
+                $lastMonthMeasurements[] = $measurement;
+
+                if ($measurementDateTime >= $oneWeekBack) {
+                    $lastWeekMeasurements = $measurement;
+
+                    if ($measurementDateTime >= $oneDayBack) {
+                        $lastDayMeasurements[] = $measurement;
+                    }
+                }
+            }
+        }
+
+        return [
+            'lastDayMeasurements' => $lastDayMeasurements,
+            'lastWeekMeasurements' => $lastWeekMeasurements,
+            'lastMonthMeasurements' => $lastMonthMeasurements,
+        ];
+    }
+
+    /**
+     * @throws \DateMalformedStringException
+     * @throws MpdfException
+     */
+    public function generatePDFReport(array $measurements)
+    {
+        $splitMeasurements = $this->splitMeasurementsByDatetime($measurements);
+
+        $imageTags = [];
+
+        foreach ($splitMeasurements as $measurementsGroup) {
+            $binaryImage = base64_encode($this->getChartPng($measurementsGroup));
+            $imageTags[] = '<img src="data:image/png;base64,' . $binaryImage . '" ';
+        }
+
+        $mpdf = new Mpdf();
+        $mpdf->WriteHTML('<h1>Raport temperatur</h1>');
+        foreach ($imageTags as $imageTag) {
+            $mpdf->WriteHTML($imageTag);
+        }
+
+        $mpdf->Output('raport_temperatur.pdf', Destination::INLINE);
+    }
 }

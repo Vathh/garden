@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Core\Database;
 use DateTime;
+use DateTimeInterface;
 use Exception;
 use PDO;
 
@@ -70,7 +71,7 @@ class TemperatureService
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             try {
                 $data[] = [
-                    'time' => (new DateTime($row['created_at']))->format(DateTimeInterface::ATOM),
+                    'datetime' => (new DateTime($row['created_at']))->format(DateTimeInterface::ATOM),
                     'temperature' => floatval($row['value'])
                 ];
             } catch (Exception $e) {
