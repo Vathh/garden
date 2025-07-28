@@ -7,6 +7,7 @@ use App\Controller\TemperatureController;
 use App\Core\Router;
 use App\Controller\AuthController;
 use App\Controller\PagesController;
+use App\Service\ReportGeneratorService;
 
 session_start();
 
@@ -35,6 +36,8 @@ $router->get('/zones/toolroom', [ZonesController::class, 'showToolroomPage']);
 $router->get('/account', [PagesController::class, 'showAccountMenuPage']);
 
 $router->get('/temperature', [TemperatureController::class, 'getTemperatureChartDataJson']);
+
+$router->get('/podglad-raportu', [ReportGeneratorService::class, 'generatePDFReport']);
 
 
 echo $router->resolve();

@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Core\Database;
+use DateMalformedStringException;
 use DateTime;
 use Exception;
 use Mpdf\Mpdf;
@@ -11,15 +12,20 @@ use Mpdf\Output\Destination;
 use PDO;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use QuickChart;
 
 class ReportGeneratorService
 {
     private PDO $conn;
+    private TemperatureService $temperatureService;
+    private MeasurementsDataService $measurementsDataService;
+    private ChartService $chartService;
 
     public function __construct()
     {
         $this->conn = Database::getInstance()->getConnection();
+        $this->temperatureService = new TemperatureService();
+        $this->measurementsDataService = new MeasurementsDataService();
+        $this->chartService = new ChartService();
     }
 
     public function generateExcelReport(string $savePath): void
@@ -37,7 +43,13 @@ class ReportGeneratorService
             $sheet = $spreadSheet->createSheet();
             $sheet->setTitle($month);
 
-            $headers = ['Czas', 'Temperatura', 'Ilość pomiarów', 'Średnia temperatura', 'Najwyższa temperatura', 'Najniższa temperatura', 'Najcieplejszy dzień'];
+            $headers = ['Czas',
+                        'Temperatura',
+                        'Ilość pomiarów',
+                        'Średnia temperatura',
+                        'Najwyższa temperatura',
+                        'Najniższa temperatura',
+                        'Najcieplejszy dzień'];
             $sheet->fromArray($headers, null, 'A1');
             $sheet->setAutoFilter('A1:G1');
 
@@ -55,11 +67,11 @@ class ReportGeneratorService
             }
 
             $sheet->setCellValue('C2', count($rows));
-            $sheet->setCellValue('D2', $this->getAverageTemperature($rows));
-            $sheet->setCellValue('E2', $this->getHighestTemperature($rows));
-            $sheet->setCellValue('F2', $this->getLowestTemperature($rows));
-            $sheet->setCellValue('G2', $this->getHottestDay($rows)['date']);
-            $sheet->setCellValue('G3', $this->getHottestDay($rows)['average']);
+            $sheet->setCellValue('D2', $this->measurementsDataService->getAverageTemperature($rows));
+            $sheet->setCellValue('E2', $this->measurementsDataService->getHighestTemperature($rows));
+            $sheet->setCellValue('F2', $this->measurementsDataService->getLowestTemperature($rows));
+            $sheet->setCellValue('G2', $this->measurementsDataService->getHottestDay($rows)['date']);
+            $sheet->setCellValue('G3', $this->measurementsDataService->getHottestDay($rows)['average']);
 
             $emptySheetIndex = $spreadSheet->getIndex(
                 $spreadSheet->getSheetByName('WorkSheet')
@@ -73,72 +85,6 @@ class ReportGeneratorService
                 echo "Błąd zapisu: " . $e->getMessage();
             }
         }
-    }
-
-    private function getAverageTemperature(array $measurements): float
-    {
-        $measurementsCount = count($measurements);
-        $temperaturesSum = 0;
-        foreach ($measurements as $measurement) {
-            $temperaturesSum += $measurement['temperature'];
-        }
-        return $temperaturesSum / $measurementsCount;
-    }
-
-    private function getHighestTemperature(array $measurements): float
-    {
-        $highestTemperature = 0;
-        foreach ($measurements as $measurement) {
-            if ($measurement['temperature'] > $highestTemperature) {
-                $highestTemperature = $measurement['temperature'];
-            }
-        }
-        return $highestTemperature;
-    }
-
-    private function getHottestDay(array $measurements): array
-    {
-        $averages = [];
-
-        foreach ($measurements as $measurement) {
-            try {
-                $date = (new DateTime($measurement['created_at']))->format('Y-m-d');
-            } catch (Exception $e) {
-                echo $e->getMessage();
-            }
-            $temperature = $measurement['temperature'];
-
-            if (!isset($averages[$date])) {
-                $averages[$date] = ['sum' => 0, 'count' => 0];
-            }
-
-            $averages[$date]['sum'] += $temperature;
-            $averages[$date]['count']++;
-        }
-
-        $hottestDate = null;
-        $highestAverage = 0;
-
-        foreach ($averages as $date => $rows) {
-            $dailyAverage = $rows['sum'] / $rows['count'];
-            if ($highestAverage < $dailyAverage) {
-                $hottestDate = $date;
-                $highestAverage = $dailyAverage;
-            }
-        }
-
-        return ['date' => $hottestDate, 'average' => $highestAverage];
-    }
-
-    private function getLowestTemperature(array $measurements): float
-    {
-        $lowestTemperature = 100;
-        foreach ($measurements as $measurement) {
-            if ($measurement['temperature'] < $lowestTemperature) {
-                $lowestTemperature = $measurement['temperature'];
-            }
-        }
-        return $lowestTemperature;
     }
 
     private function fetchTemperaturesGroupedByMonth(): array
@@ -170,163 +116,20 @@ class ReportGeneratorService
         return $temperaturesGroupedByMonth;
     }
 
-    private function getAggregatedMeasurement(array $measurements): array
-    {
-        if (empty($measurements)) {
-            return ['datetime' => null, 'temperature' => null];
-        }
-
-        $averageDateTime = $measurements[intval(count($measurements) / 2)]['datetime'] ?? null;
-        $averageTemperature = $this->getAverageTemperature($measurements);
-
-        return ['datetime' => $averageDateTime,
-            'temperature' => $averageTemperature];
-    }
-
-    private function splitMeasurementsIntoSmallerGroups(array $measurements, int $splitArraysGroups): array
-    {
-        $splitArraySize = max(1, (int)floor(count($measurements) / $splitArraysGroups));
-
-        return array_chunk($measurements, $splitArraySize);
-    }
-
-    private function reduceLabels(array $labels, int $reducedLabelsCount): array
-    {
-        $step = intval(count($labels) / $reducedLabelsCount + 1);
-
-        $reducedLabels = [];
-
-        foreach ($labels as $i => $label) {
-            if ($i % $step === 0) {
-                $reducedLabels[] = $label;
-            } else {
-                $reducedLabels[] = '';
-            }
-        }
-
-        return $reducedLabels;
-    }
-
-    private function getChartPng(array $measurements, int $chartPointsCount) : string
-    {
-        $finalMeasurements = [];
-
-        if (count($measurements) > $chartPointsCount) {
-            $splitMeasurements = $this->splitMeasurementsIntoSmallerGroups($measurements, $chartPointsCount);
-
-            foreach ($splitMeasurements as $chunk) {
-                $finalMeasurements[] = $this->getAggregatedMeasurement($chunk);
-            }
-        } else {
-            $finalMeasurements = $measurements;
-        }
-
-        $labels = array_map(function ($item) {
-            try {
-                $datetime = new DateTime($item);
-            } catch (Exception $e) {
-                echo $e->getMessage();
-            }
-            return $datetime->format('H:i:s') . "\n" . $datetime->format('Y-m-d');
-        }, array_column($finalMeasurements, 'datetime'));
-
-        $reducedLabels = $this->reduceLabels($labels, 5);
-
-        $temperatures = array_column($finalMeasurements, 'temperature');
-
-        $chart = new QuickChart(array(
-            'width' => 1000,
-            'height' => 600,
-        ));
-
-        $chart->setConfig([
-            'type' => 'line',
-            'data' => [
-                'labels' => $reducedLabels,
-                'datasets' => [[
-                    'label' => 'Temperatura',
-                    'data' => $temperatures,
-                    'fill' => 'false',
-                ]]
-            ],
-            'options' => [
-                'responsive' => true,
-                'layout' => [
-                    'padding' => [
-                        'bottom' => 40
-                    ]
-                ],
-                'scales' => [
-                    'x' => [
-                        'ticks' => [
-                            'autoSkip' => true,
-                            'maxTicksLimit' => 20,
-                            'maxRotation' => 0,
-                            'minRotation' => 0,
-                        ]
-                    ]
-                ]
-            ]
-        ]);
-
-        try {
-            return $chart->toBinary();
-        } catch (Exception $e) {
-            echo $e->getMessage();
-        }
-
-        return '';
-    }
-
     /**
-     * @throws \DateMalformedStringException
-     */
-    private function splitMeasurementsByDatetime(array $measurements): array
-    {
-        $oneDayBack = (new DateTime())->modify('-1 day');
-        $oneWeekBack = (new DateTime())->modify('-7 days');
-        $oneMonthBack = (new DateTime())->modify('-1 month');
-
-        $lastDayMeasurements = [];
-        $lastWeekMeasurements = [];
-        $lastMonthMeasurements = [];
-
-        foreach ($measurements as $measurement) {
-            $measurementDateTime = new DateTime($measurement['datetime']);
-
-            if ($measurementDateTime >= $oneMonthBack) {
-                $lastMonthMeasurements[] = $measurement;
-
-                if ($measurementDateTime >= $oneWeekBack) {
-                    $lastWeekMeasurements = $measurement;
-
-                    if ($measurementDateTime >= $oneDayBack) {
-                        $lastDayMeasurements[] = $measurement;
-                    }
-                }
-            }
-        }
-
-        return [
-            'lastDayMeasurements' => $lastDayMeasurements,
-            'lastWeekMeasurements' => $lastWeekMeasurements,
-            'lastMonthMeasurements' => $lastMonthMeasurements,
-        ];
-    }
-
-    /**
-     * @throws \DateMalformedStringException
+     * @throws DateMalformedStringException
      * @throws MpdfException
      */
-    public function generatePDFReport(array $measurements)
+    public function generatePDFReport()
     {
-        $splitMeasurements = $this->splitMeasurementsByDatetime($measurements);
+        $measurements = $this->temperatureService->getTemperatureDataForSelectedRange('30d');
+        $splitMeasurements = $this->measurementsDataService->splitMeasurementsByDatetime($measurements);
 
         $imageTags = [];
 
         foreach ($splitMeasurements as $measurementsGroup) {
             if (!empty($measurementsGroup)) {
-                $binaryImage = base64_encode($this->getChartPng($measurementsGroup, 200));
+                $binaryImage = base64_encode($this->chartService->getChartPng($measurementsGroup, 200));
                 $imageTags[] = '<img src="data:image/png;base64,' . $binaryImage . '" />';
             }
         }
@@ -337,6 +140,7 @@ class ReportGeneratorService
             $mpdf->WriteHTML($imageTag);
         }
 
-        $mpdf->Output(__DIR__ . '/../../storage/reports/raport_temperatur.pdf', Destination::FILE);
+//        $mpdf->Output($path, Destination::FILE);
+        $mpdf->Output('raport_test.pdf', Destination::INLINE);
     }
 }

@@ -6,6 +6,6 @@ use App\Service\ReportGeneratorService;
 
 $generator = new ReportGeneratorService();
 
-$path = __DIR__ . '/../storage/reports/temperature_report_' . date('Ymd_His') . '.xlsx';
+$path = __DIR__ . '/../storage/reports/temperature_excel_report_' . date('Ymd_His') . '.xlsx';
 
 $generator->generateExcelReport($path);

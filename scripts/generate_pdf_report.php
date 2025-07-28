@@ -5,11 +5,11 @@ require_once __DIR__ .  "/../vendor/autoload.php";
 use App\Service\ReportGeneratorService;
 
 $generator = new ReportGeneratorService();
-$tempService = new \App\Service\TemperatureService();
 
-$data = $tempService->getTemperatureDataForSelectedRange('30d');
+$path = __DIR__ . '/../storage/reports/temperature_pdf_report_' . date('Ymd_His') . '.pdf';
+
 try {
-    $generator->generatePDFReport($data);
+    $generator->generatePDFReport($path);
 } catch (Exception $e) {
     echo $e->getMessage();
 }
