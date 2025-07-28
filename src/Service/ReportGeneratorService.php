@@ -207,14 +207,18 @@ class ReportGeneratorService
         return $reducedLabels;
     }
 
-    private function getChartPng(array $measurements) : string
+    private function getChartPng(array $measurements, int $chartPointsCount) : string
     {
-        $aggregatedMeasurements = [];
+        $finalMeasurements = [];
 
-        $splitMeasurements = $this->splitMeasurementsIntoSmallerGroups($measurements, 200);
+        if (count($measurements) > $chartPointsCount) {
+            $splitMeasurements = $this->splitMeasurementsIntoSmallerGroups($measurements, $chartPointsCount);
 
-        foreach ($splitMeasurements as $chunk) {
-            $aggregatedMeasurements[] = $this->getAggregatedMeasurement($chunk);
+            foreach ($splitMeasurements as $chunk) {
+                $finalMeasurements[] = $this->getAggregatedMeasurement($chunk);
+            }
+        } else {
+            $finalMeasurements = $measurements;
         }
 
         $labels = array_map(function ($item) {
@@ -224,11 +228,11 @@ class ReportGeneratorService
                 echo $e->getMessage();
             }
             return $datetime->format('H:i:s') . "\n" . $datetime->format('Y-m-d');
-        }, array_column($aggregatedMeasurements, 'datetime'));
+        }, array_column($finalMeasurements, 'datetime'));
 
         $reducedLabels = $this->reduceLabels($labels, 5);
 
-        $temperatures = array_column($aggregatedMeasurements, 'temperature');
+        $temperatures = array_column($finalMeasurements, 'temperature');
 
         $chart = new QuickChart(array(
             'width' => 1000,
@@ -321,8 +325,10 @@ class ReportGeneratorService
         $imageTags = [];
 
         foreach ($splitMeasurements as $measurementsGroup) {
-            $binaryImage = base64_encode($this->getChartPng($measurementsGroup));
-            $imageTags[] = '<img src="data:image/png;base64,' . $binaryImage . '" ';
+            if (!empty($measurementsGroup)) {
+                $binaryImage = base64_encode($this->getChartPng($measurementsGroup, 200));
+                $imageTags[] = '<img src="data:image/png;base64,' . $binaryImage . '" />';
+            }
         }
 
         $mpdf = new Mpdf();
@@ -331,6 +337,6 @@ class ReportGeneratorService
             $mpdf->WriteHTML($imageTag);
         }
 
-        $mpdf->Output('raport_temperatur.pdf', Destination::INLINE);
+        $mpdf->Output(__DIR__ . '/../../storage/reports/raport_temperatur.pdf', Destination::FILE);
     }
 }
