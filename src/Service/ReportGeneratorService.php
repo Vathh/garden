@@ -120,25 +120,41 @@ class ReportGeneratorService
      * @throws DateMalformedStringException
      * @throws MpdfException
      */
-    public function generatePDFReport()
+    public function generatePDFReport(): void
     {
         $measurements = $this->temperatureService->getTemperatureDataForSelectedRange('30d');
         $splitMeasurements = $this->measurementsDataService->splitMeasurementsByDatetime($measurements);
-
-        $imageTags = [];
-
-        foreach ($splitMeasurements as $measurementsGroup) {
-            if (!empty($measurementsGroup)) {
-                $binaryImage = base64_encode($this->chartService->getChartPng($measurementsGroup, 200));
-                $imageTags[] = '<img src="data:image/png;base64,' . $binaryImage . '" />';
-            }
-        }
-
         $mpdf = new Mpdf();
-        $mpdf->WriteHTML('<h1>Raport temperatur</h1>');
-        foreach ($imageTags as $imageTag) {
-            $mpdf->WriteHTML($imageTag);
+
+        ob_start();
+
+        $base64DayChart = '';
+        $base64WeekChart = '';
+        $base64MonthChart = '';
+
+        if ($splitMeasurements['lastDayMeasurements'] != null) {
+            $base64DayChart = base64_encode($this->chartService
+                                                ->getChartPng($splitMeasurements['lastDayMeasurements'], 200));
         }
+        if ($splitMeasurements['lastWeekMeasurements'] != null) {
+            $base64WeekChart = base64_encode($this->chartService
+                                                ->getChartPng($splitMeasurements['lastWeekMeasurements'], 200));
+        }if ($splitMeasurements['lastMonthMeasurements'] != null) {
+            $base64MonthChart = base64_encode($this->chartService
+                                                ->getChartPng($splitMeasurements['lastMonthMeasurements'], 200));
+        }
+
+        $totalMeasurements = count($measurements);
+        $averageTemperature = $this->measurementsDataService->getAverageTemperature($measurements);
+        $maxTemperature = $this->measurementsDataService->getHighestTemperature($measurements);
+        $minTemperature = $this->measurementsDataService->getLowestTemperature($measurements);
+        $hottestDay = $this->measurementsDataService->getHottestDay($measurements)['date'];
+        $hottestDayAverage = $this->measurementsDataService->getHottestDay($measurements)['average'];
+
+        require __DIR__ . "/../../templates/report.html.php";
+
+        $html = ob_get_clean();
+        $mpdf->WriteHTML($html);
 
 //        $mpdf->Output($path, Destination::FILE);
         $mpdf->Output('raport_test.pdf', Destination::INLINE);

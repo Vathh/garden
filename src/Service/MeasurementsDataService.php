@@ -15,7 +15,7 @@ class MeasurementsDataService
         foreach ($measurements as $measurement) {
             $temperaturesSum += $measurement['temperature'];
         }
-        return $temperaturesSum / $measurementsCount;
+        return round($temperaturesSum / $measurementsCount, 2);
     }
 
     public function getHighestTemperature(array $measurements): float
@@ -26,7 +26,7 @@ class MeasurementsDataService
                 $highestTemperature = $measurement['temperature'];
             }
         }
-        return $highestTemperature;
+        return round($highestTemperature, 2);
     }
 
     public function getHottestDay(array $measurements): array
@@ -35,7 +35,7 @@ class MeasurementsDataService
 
         foreach ($measurements as $measurement) {
             try {
-                $date = (new DateTime($measurement['created_at']))->format('Y-m-d');
+                $date = (new DateTime($measurement['datetime']))->format('Y-m-d');
             } catch (Exception $e) {
                 echo $e->getMessage();
             }
@@ -60,7 +60,7 @@ class MeasurementsDataService
             }
         }
 
-        return ['date' => $hottestDate, 'average' => $highestAverage];
+        return ['date' => $hottestDate, 'average' => round($highestAverage, 2)];
     }
 
     public function getLowestTemperature(array $measurements): float
@@ -71,7 +71,7 @@ class MeasurementsDataService
                 $lowestTemperature = $measurement['temperature'];
             }
         }
-        return $lowestTemperature;
+        return round($lowestTemperature, 2);
     }
 
     public function getAggregatedMeasurement(array $measurements): array
@@ -114,7 +114,7 @@ class MeasurementsDataService
                 $lastMonthMeasurements[] = $measurement;
 
                 if ($measurementDateTime >= $oneWeekBack) {
-                    $lastWeekMeasurements = $measurement;
+                    $lastWeekMeasurements[] = $measurement;
 
                     if ($measurementDateTime >= $oneDayBack) {
                         $lastDayMeasurements[] = $measurement;
