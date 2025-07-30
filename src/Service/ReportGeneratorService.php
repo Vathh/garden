@@ -120,7 +120,7 @@ class ReportGeneratorService
      * @throws DateMalformedStringException
      * @throws MpdfException
      */
-    public function generatePDFReport(): void
+    public function generatePDFReport(string $path): void
     {
         $measurements = $this->temperatureService->getTemperatureDataForSelectedRange('30d');
         $splitMeasurements = $this->measurementsDataService->splitMeasurementsByDatetime($measurements);
@@ -156,7 +156,7 @@ class ReportGeneratorService
         $html = ob_get_clean();
         $mpdf->WriteHTML($html);
 
-//        $mpdf->Output($path, Destination::FILE);
-        $mpdf->Output('raport_test.pdf', Destination::INLINE);
+        $mpdf->Output($path, Destination::FILE);
+//        $mpdf->Output('raport_test.pdf', Destination::INLINE);
     }
 }

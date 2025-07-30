@@ -37,7 +37,9 @@ $router->get('/account', [PagesController::class, 'showAccountMenuPage']);
 
 $router->get('/temperature', [TemperatureController::class, 'getTemperatureChartDataJson']);
 
-$router->get('/podglad-raportu', [ReportGeneratorService::class, 'generatePDFReport']);
+$router->get('/reports', [PagesController::class, 'showReportsPage']);
+
+//$router->get('/podglad-raportu', [ReportGeneratorService::class, 'generatePDFReport']);
 
 
 echo $router->resolve();
