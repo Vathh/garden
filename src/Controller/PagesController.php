@@ -46,21 +46,46 @@ class PagesController
 
         $page = isset($_GET['page']) && (int)$_GET['page'] > 0 ? (int)$_GET['page'] : 1;
 
-        $excelFiles = array_filter(scandir($reportsDir), fn($file) => str_ends_with($file, '.xlsx'));
-        $pdfFiles = array_filter(scandir($reportsDir), fn($file) => str_ends_with($file, '.pdf'));
-        rsort($excelFiles);
-        rsort($pdfFiles);
+        $files = array_filter(
+            scandir($reportsDir),
+            fn($file) => str_ends_with($file, '.xlsx') || str_ends_with($file, '.pdf')
+        );
 
-        $total = count($excelFiles);
+        $reportsSortedByDate = [];
+
+        foreach ($files as $file) {
+            preg_match('/temperature_report_(\d{8}_\d{6})\.(pdf|xlsx)/', $file, $matches);
+
+            if ($matches) {
+                $datetime = $matches[1];
+                $extension = $matches[2];
+
+                if (!isset($reports[$datetime])) {
+                    $reports[$datetime] = ['pdf' => null, 'xlsx' => null];
+                }
+
+                $reportsSortedByDate[$datetime][$extension] = $file;
+            }
+        }
+
+        krsort($reportsSortedByDate);
+
+        $allReportsDateTimes = array_keys($reportsSortedByDate);
+        $total = count($allReportsDateTimes);
         $totalPages = ceil($total / $perPage);
         $offset = ($page - 1) * $perPage;
-        $visibleExcelFiles = array_slice($excelFiles, $offset, $perPage);
-        $visiblePdfFiles = array_slice($pdfFiles, $offset, $perPage);
+
+        $visibleReportDateTimes = array_slice($allReportsDateTimes, $offset, $perPage);
+
+        $visibleFiles = [];
+
+        foreach ($visibleReportDateTimes as $datetime) {
+            $visibleFiles[$datetime] = $reportsSortedByDate[$datetime];
+        }
 
         try {
             View::render('pages.reports', [
-                'excelFiles' => $visibleExcelFiles,
-                'pdfFiles' => $visiblePdfFiles,
+                'files' => $visibleFiles,
                 'url' => $url,
                 'page' => $page,
                 'perPage' => $perPage,

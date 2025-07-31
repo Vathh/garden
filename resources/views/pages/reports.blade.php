@@ -16,20 +16,46 @@
             </select>
         </form>
 
-        @if(count($pdfFiles) === 0)
+        @if(count($files) === 0)
             <p>Brak plików.</p>
         @else
             <div class="reports">
-                @foreach($excelFiles as $excelFIle)
+                @foreach($files as $datetime => $report)
                         <div class="reports__container">
-                            <p>Data</p>
-                            <span>Pobierz EXCEL</span>
-                            <span>Pobierz PDF</span>
+                            <p>{{ \DateTime::createFromFormat('Ymd_His', $datetime)->format('Y-m-d H:i:s') }}</p>
+                            <span>
+                                @if (isset($report['pdf']))
+                                    <a href="{{ $url . rawurlencode($report['pdf']) }}" download>Pobierz PDF</a>
+                                @else
+                                    —
+                                @endif
+                            </span>
+                            <span>
+                                @if (isset($report['xlsx']))
+                                    <a href="{{ $url . rawurlencode($report['xlsx']) }}" download>Pobierz Excel</a>
+                                @else
+                                    —
+                                @endif
+                            </span>
                         </div>
                 @endforeach
             </div>
         @endif
 
+        <div class="pagination">
+            @if ($page > 1)
+                <a href="?page={{ $page - 1 }}&per_page={{ $perPage }}">&#171; Poprzednia</a>
+            @endif
 
+            @for ($i = 1; $i <= $totalPages; $i++)
+                <a href="?page={{ $i }}&per_page={{ $perPage }}" @if ($i === $page) @endif>
+                    {{ $i }}
+                </a>
+            @endfor
+
+            @if ($page < $totalPages)
+                <a href="?page={{ $page + 1 }}&per_page={{ $perPage }}">Następna &#187;</a>
+            @endif
+        </div>
     </div>
 @endsection
