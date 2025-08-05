@@ -8,7 +8,7 @@ function loadChart(range)
     fetch(`/temperature?range=` + range)
         .then(res => res.json())
         .then(data => {
-            const labels = data.map(d => d.time);
+            const labels = data.map(d => d.datetime);
             const temps = data.map(d => d.temperature);
 
             if (chart) {
@@ -25,7 +25,9 @@ function loadChart(range)
                         data: temps,
                         borderColor: 'rgb(44,44,44)',
                         backgroundColor: 'rgb(44,44,44)',
-                        tension: 0.2
+                        tension: 0.2,
+                        borderWidth: 1,
+                        pointRadius: 1
                     }]
                 },
                 options: {

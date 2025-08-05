@@ -3,6 +3,11 @@
 namespace App\Controller;
 
 use App\Core\Database;
+use App\Service\TemperatureService;
+use DateTime;
+use DateTimeInterface;
+use Exception;
+use JetBrains\PhpStorm\NoReturn;
 use PDO;
 
 class TemperatureController
@@ -14,33 +19,12 @@ class TemperatureController
         $this->conn = Database::getInstance()->getConnection();
     }
 
-    public function getTemperatureChartData()
+    #[NoReturn] public function getTemperatureChartDataJson(): void
     {
         $range = $_GET["range"] ?? '1h';
 
-        $interval = match ($range) {
-            '6h' => '6 HOUR',
-            '1d' => '1 DAY',
-            '7d' => '7 DAY',
-            default => '1 HOUR',
-        };
-
-        $stmt = $this->conn->prepare("
-            SELECT value, created_at
-            FROM temperatures
-            WHERE created_at >= NOW() - INTERVAL $interval
-            ORDER BY created_at ASC
-        ");
-
-        $stmt->execute();
-
-        $data = [];
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $data[] = [
-                'time' => date('H:i', strtotime($row['created_at'])),
-                'temperature' => floatval($row['value'])
-            ];
-        }
+        $temperatureService = new TemperatureService();
+        $data = $temperatureService->getTemperatureDataForSelectedRange($range);
 
         header('Content-type: application/json');
         echo json_encode($data);
