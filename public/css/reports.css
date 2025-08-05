@@ -1,0 +1,106 @@
+.reports__header{
+    font-size: 26px;
+    margin-top: 30px;
+}
+
+.perPage__form{
+
+}
+
+.perPage__form-label{
+    padding-right: 15px;
+}
+
+.perPage__form-select{
+    font-size: 18px;
+}
+
+.perPage__form-option{
+
+}
+
+.noFiles{
+
+}
+
+.reports{
+    min-width: 500px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.reports__container{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 20px;
+    border: 1px solid black;
+    border-bottom: none;
+
+    &:last-of-type{
+        border-bottom: 1px solid black;
+    }
+}
+
+.reports__container-date{
+    font-size: 20px;
+    margin-right: 50px;
+    flex: 1;
+}
+
+.reports__container-menu{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-right: 20px;
+    align-items: center;
+    gap: 5px;
+    padding: 10px 0;
+}
+
+.reports__container-link{
+    text-decoration: none;
+    font-size: 16px !important;
+    padding: 10px !important;
+    border-radius: 5px !important;
+}
+
+.reports__container-separator{
+    width: 3px;
+    background-color: black;
+    align-self: stretch;
+    margin: 20px 0;
+}
+
+.reports__container-deleteForm{
+
+}
+
+.pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.pagination__link {
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    text-decoration: none;
+    color: #333;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background-color 0.2s, color 0.2s;
+
+    &:hover{
+        background-color: #eee;
+    }
+}
+
+.pagination__link-active{
+    background-color: #333;
+    color: #fff;
+    pointer-events: none;
+}

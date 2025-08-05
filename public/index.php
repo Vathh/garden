@@ -38,6 +38,7 @@ $router->get('/account', [PagesController::class, 'showAccountMenuPage']);
 $router->get('/temperature', [TemperatureController::class, 'getTemperatureChartDataJson']);
 
 $router->get('/reports', [PagesController::class, 'showReportsPage']);
+$router->post('/reports/delete', [PagesController::class, 'deleteReportFile']);
 
 //$router->get('/podglad-raportu', [ReportGeneratorService::class, 'generatePDFReport']);
 

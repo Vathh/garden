@@ -30,11 +30,11 @@ class ReportGeneratorService
 
     public function generateExcelReport(string $savePath): void
     {
-        if (!is_writable(dirname($savePath))) {
-            echo "Folder nie ma uprawnień do zapisu: " . dirname($savePath) . "\n";
-        } else {
-            echo "Folder jest zapisywalny" . dirname($savePath) . "\n";
-        }
+//        if (!is_writable(dirname($savePath))) {
+//            echo "Folder nie ma uprawnień do zapisu: " . dirname($savePath) . "\n";
+//        } else {
+//            echo "Folder jest zapisywalny" . dirname($savePath) . "\n";
+//        }
 
         $spreadSheet = new Spreadsheet();
         $temperatures = $this->fetchTemperaturesGroupedByMonth();
@@ -61,7 +61,7 @@ class ReportGeneratorService
 
             $i = 2;
             foreach ($rows as $row) {
-                $sheet->setCellValue("A$i", $row['created_at']);
+                $sheet->setCellValue("A$i", $row['datetime']);
                 $sheet->setCellValue("B$i", $row['temperature']);
                 $i++;
             }
@@ -106,7 +106,7 @@ class ReportGeneratorService
 
                 $temperaturesGroupedByMonth[$month][] = [
                     'temperature' => $row['value'],
-                    'created_at' => $dateTime->format('Y-m-d H:i:s')
+                    'datetime' => $dateTime->format('Y-m-d H:i:s')
                 ];
             } catch (Exception $e) {
                 echo $e->getMessage();

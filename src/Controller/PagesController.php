@@ -34,11 +34,11 @@ class PagesController
     {
         Auth::requireAuth();
 
-        $reportsDir = __DIR__ . '/../../storage/reports';
-        $url = '/storage/reports';
+        $reportsDir = __DIR__ . '/../../public/report-files';
+        $url = '/report-files';
 
         $perPageOptions = [3, 10, 20, 100];
-        $defaultPerPageOption = 20;
+        $defaultPerPageOption = 10;
 
         $perPage = isset($_GET['per_page']) && in_array((int)$_GET['per_page'], $perPageOptions)
             ? (int)$_GET['per_page']
@@ -95,5 +95,25 @@ class PagesController
         } catch (Exception $e) {
             echo "Błąd: " . $e->getMessage();
         }
+    }
+
+    public function deleteReportFile(): void
+    {
+        Auth::requireAuth();
+
+        if (!isset($_POST['fileName'])) {
+            echo 'Brak takiego pliku.';
+            return;
+        }
+
+        $fileName = basename($_POST['fileName']);
+        $filePath = __DIR__ . '/../../public/report-files/' . $fileName;
+
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+
+        header('Location: /reports');
+        exit;
     }
 }
