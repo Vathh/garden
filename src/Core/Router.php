@@ -16,7 +16,7 @@ class Router
         $this->routes['POST'][$path] = $callback;
     }
 
-    public function resolve(): string
+    public function resolve(): mixed
     {
         $method = $_SERVER['REQUEST_METHOD'];
         $path = $_SERVER['REQUEST_URI'] ?? '/';

@@ -7,5 +7,10 @@
         <form action="/changePassword" method="GET" class="container__button">
             <button type="submit" class="container__button-btn">Zmień hasło</button>
         </form>
+        <a class="container__link container__button-btn" href="/reports">Raporty dobowe</a>
     </div>
 @endsection
+
+{{--@section('content')--}}
+{{--    <a href="/podglad-raportu" target="_blank">🔍 Podgląd raportu</a>--}}
+{{--@endsection--}}

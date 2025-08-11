@@ -29,4 +29,91 @@ class PagesController
             echo "Błąd: " . $e->getMessage();
         }
     }
+
+    public function showReportsPage(): void
+    {
+        Auth::requireAuth();
+
+        $reportsDir = __DIR__ . '/../../public/report-files';
+        $url = '/report-files';
+
+        $perPageOptions = [3, 10, 20, 100];
+        $defaultPerPageOption = 10;
+
+        $perPage = isset($_GET['per_page']) && in_array((int)$_GET['per_page'], $perPageOptions)
+            ? (int)$_GET['per_page']
+            : $defaultPerPageOption;
+
+        $page = isset($_GET['page']) && (int)$_GET['page'] > 0 ? (int)$_GET['page'] : 1;
+
+        $files = array_filter(
+            scandir($reportsDir),
+            fn($file) => str_ends_with($file, '.xlsx') || str_ends_with($file, '.pdf')
+        );
+
+        $reportsSortedByDate = [];
+
+        foreach ($files as $file) {
+            preg_match('/temperature_report_(\d{8}_\d{6})\.(pdf|xlsx)/', $file, $matches);
+
+            if ($matches) {
+                $datetime = $matches[1];
+                $extension = $matches[2];
+
+                if (!isset($reports[$datetime])) {
+                    $reports[$datetime] = ['pdf' => null, 'xlsx' => null];
+                }
+
+                $reportsSortedByDate[$datetime][$extension] = $file;
+            }
+        }
+
+        krsort($reportsSortedByDate);
+
+        $allReportsDateTimes = array_keys($reportsSortedByDate);
+        $total = count($allReportsDateTimes);
+        $totalPages = ceil($total / $perPage);
+        $offset = ($page - 1) * $perPage;
+
+        $visibleReportDateTimes = array_slice($allReportsDateTimes, $offset, $perPage);
+
+        $visibleFiles = [];
+
+        foreach ($visibleReportDateTimes as $datetime) {
+            $visibleFiles[$datetime] = $reportsSortedByDate[$datetime];
+        }
+
+        try {
+            View::render('pages.reports', [
+                'files' => $visibleFiles,
+                'url' => $url,
+                'page' => $page,
+                'perPage' => $perPage,
+                'totalPages' => $totalPages,
+                'perPageOptions' => $perPageOptions,
+            ]);
+        } catch (Exception $e) {
+            echo "Błąd: " . $e->getMessage();
+        }
+    }
+
+    public function deleteReportFile(): void
+    {
+        Auth::requireAuth();
+
+        if (!isset($_POST['fileName'])) {
+            echo 'Brak takiego pliku.';
+            return;
+        }
+
+        $fileName = basename($_POST['fileName']);
+        $filePath = __DIR__ . '/../../public/report-files/' . $fileName;
+
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+
+        header('Location: /reports');
+        exit;
+    }
 }
