@@ -70,17 +70,17 @@ class PagesController
 
         krsort($reportsSortedByDate);
 
-        $allReportsDateTimes = array_keys($reportsSortedByDate);
-        $total = count($allReportsDateTimes);
+        $allReportsDates = array_keys($reportsSortedByDate);
+        $total = count($allReportsDates);
         $totalPages = ceil($total / $perPage);
         $offset = ($page - 1) * $perPage;
 
-        $visibleReportDateTimes = array_slice($allReportsDateTimes, $offset, $perPage);
+        $visibleReportDates = array_slice($allReportsDates, $offset, $perPage);
 
         $visibleFiles = [];
 
-        foreach ($visibleReportDateTimes as $datetime) {
-            $visibleFiles[$datetime] = $reportsSortedByDate[$datetime];
+        foreach ($visibleReportDates as $date) {
+            $visibleFiles[$date] = $reportsSortedByDate[$date];
         }
 
         try {

@@ -21,9 +21,9 @@
             <p class="noFiles">Brak plików.</p>
         @else
             <div class="reports">
-                @foreach($files as $datetime => $report)
+                @foreach($files as $date => $report)
                         <div class="reports__container">
-                            <p class="reports__container-date">{{ \DateTime::createFromFormat('Ymd_His', $datetime)->format('Y-m-d') }}</p>
+                            <p class="reports__container-date">{{ DateTime::createFromFormat('Ymd', $date)->format('Y-m-d') }}</p>
                             <span class="reports__container-menu">
                                 @if (isset($report['pdf']))
                                     <span>Raport PDF</span>
