@@ -57,7 +57,7 @@ class PagesController
             preg_match('/temperature_report_(\d{8})_\d{6}\.(pdf|xlsx)/', $file, $matches);
 
             if ($matches) {
-                $date = $matches[1]; // tylko Ymd
+                $date = $matches[1];
                 $extension = $matches[2];
 
                 if (!isset($reportsSortedByDate[$date])) {
