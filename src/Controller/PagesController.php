@@ -54,17 +54,17 @@ class PagesController
         $reportsSortedByDate = [];
 
         foreach ($files as $file) {
-            preg_match('/temperature_report_(\d{8}_\d{6})\.(pdf|xlsx)/', $file, $matches);
+            preg_match('/temperature_report_(\d{8})_\d{6}\.(pdf|xlsx)/', $file, $matches);
 
             if ($matches) {
-                $datetime = $matches[1];
+                $date = $matches[1]; // tylko Ymd
                 $extension = $matches[2];
 
-                if (!isset($reports[$datetime])) {
-                    $reports[$datetime] = ['pdf' => null, 'xlsx' => null];
+                if (!isset($reportsSortedByDate[$date])) {
+                    $reportsSortedByDate[$date] = ['pdf' => null, 'xlsx' => null];
                 }
 
-                $reportsSortedByDate[$datetime][$extension] = $file;
+                $reportsSortedByDate[$date][$extension] = $file;
             }
         }
 
