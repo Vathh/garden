@@ -37,6 +37,11 @@ class ReportGeneratorService
 //        }
 
         $spreadSheet = new Spreadsheet();
+
+        $spreadSheet->removeSheetByIndex(
+            $spreadSheet->getIndex($spreadSheet->getActiveSheet())
+        );
+
         $temperatures = $this->fetchTemperaturesGroupedByMonth();
 
         foreach ($temperatures as $month => $rows) {
@@ -72,11 +77,6 @@ class ReportGeneratorService
             $sheet->setCellValue('F2', $this->measurementsDataService->getLowestTemperature($rows));
             $sheet->setCellValue('G2', $this->measurementsDataService->getHottestDay($rows)['date']);
             $sheet->setCellValue('G3', $this->measurementsDataService->getHottestDay($rows)['average']);
-
-            $emptySheetIndex = $spreadSheet->getIndex(
-                $spreadSheet->getSheetByName('WorkSheet')
-            );
-            $spreadSheet->removeSheetByIndex($emptySheetIndex);
 
             $writer = new Xlsx($spreadSheet);
             try {
