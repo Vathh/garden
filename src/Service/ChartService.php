@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Model\TemperatureMeasurement;
 use DateTime;
 use Exception;
 use QuickChart;
@@ -47,18 +48,18 @@ class ChartService
             $finalMeasurements = $measurements;
         }
 
-        $labels = array_map(function ($item) {
+        $labels = array_map(function (TemperatureMeasurement $measurement) {
             try {
-                $datetime = new DateTime($item);
+                $datetime = new DateTime($measurement->getDateTime());
             } catch (Exception $e) {
                 echo $e->getMessage();
             }
             return $datetime->format('H:i:s') . "\n" . $datetime->format('Y-m-d');
-        }, array_column($finalMeasurements, 'datetime'));
+        }, $finalMeasurements);
 
         $reducedLabels = $this->reduceLabels($labels, 5);
 
-        $temperatures = array_column($finalMeasurements, 'temperature');
+        $temperatures = array_map(fn(TemperatureMeasurement $n) => $n->getTemperature(), $finalMeasurements);
 
         $chart = new QuickChart(array(
             'width' => 1000,

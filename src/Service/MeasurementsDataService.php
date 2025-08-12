@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Model\TemperatureMeasurement;
 use DateMalformedStringException;
 use DateTime;
 use Exception;
@@ -13,7 +14,7 @@ class MeasurementsDataService
         $measurementsCount = count($measurements);
         $temperaturesSum = 0;
         foreach ($measurements as $measurement) {
-            $temperaturesSum += $measurement['temperature'];
+            $temperaturesSum += $measurement->getTemperature();
         }
         return round($temperaturesSum / $measurementsCount, 2);
     }
@@ -22,8 +23,8 @@ class MeasurementsDataService
     {
         $highestTemperature = 0;
         foreach ($measurements as $measurement) {
-            if ($measurement['temperature'] > $highestTemperature) {
-                $highestTemperature = $measurement['temperature'];
+            if ($measurement->getTemperature() > $highestTemperature) {
+                $highestTemperature = $measurement->getTemperature();
             }
         }
         return round($highestTemperature, 2);
@@ -35,11 +36,11 @@ class MeasurementsDataService
 
         foreach ($measurements as $measurement) {
             try {
-                $date = (new DateTime($measurement['datetime']))->format('Y-m-d');
+                $date = (new DateTime($measurement->getDateTime()))->format('Y-m-d');
             } catch (Exception $e) {
                 echo $e->getMessage();
             }
-            $temperature = $measurement['temperature'];
+            $temperature = $measurement->getTemperature();
 
             if (!isset($averages[$date])) {
                 $averages[$date] = ['sum' => 0, 'count' => 0];
@@ -67,24 +68,24 @@ class MeasurementsDataService
     {
         $lowestTemperature = 100;
         foreach ($measurements as $measurement) {
-            if ($measurement['temperature'] < $lowestTemperature) {
-                $lowestTemperature = $measurement['temperature'];
+            if ($measurement->getTemperature() < $lowestTemperature) {
+                $lowestTemperature = $measurement->getTemperature();
             }
         }
         return round($lowestTemperature, 2);
     }
 
-    public function getAggregatedMeasurement(array $measurements): array
+    public function getAggregatedMeasurement(array $measurements): TemperatureMeasurement
     {
+        $result = new TemperatureMeasurement();
         if (empty($measurements)) {
-            return ['datetime' => null, 'temperature' => null];
+            return $result->setDatetime(null)->setTemperature((float)null);
         }
 
-        $averageDateTime = $measurements[intval(count($measurements) / 2)]['datetime'] ?? null;
+        $averageDateTime = $measurements[intval(count($measurements) / 2)]->getDateTime() ?? null;
         $averageTemperature = $this->getAverageTemperature($measurements);
 
-        return ['datetime' => $averageDateTime,
-            'temperature' => $averageTemperature];
+        return $result->setDatetime($averageDateTime)->setTemperature($averageTemperature);
     }
 
     public function splitMeasurementsIntoSmallerGroups(array $measurements, int $splitArraysGroups): array
@@ -108,7 +109,7 @@ class MeasurementsDataService
         $lastMonthMeasurements = [];
 
         foreach ($measurements as $measurement) {
-            $measurementDateTime = new DateTime($measurement['datetime']);
+            $measurementDateTime = new DateTime($measurement->getDateTime());
 
             if ($measurementDateTime >= $oneMonthBack) {
                 $lastMonthMeasurements[] = $measurement;

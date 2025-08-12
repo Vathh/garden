@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Core\Database;
+use App\Model\TemperatureMeasurement;
 use DateMalformedStringException;
 use DateTime;
 use Exception;
@@ -42,9 +43,9 @@ class ReportGeneratorService
             $spreadSheet->getIndex($spreadSheet->getActiveSheet())
         );
 
-        $temperatures = $this->fetchTemperaturesGroupedByMonth();
+        $temperaturesGroupedByMonth = $this->fetchTemperaturesGroupedByMonth();
 
-        foreach ($temperatures as $month => $rows) {
+        foreach ($temperaturesGroupedByMonth as $month => $rows) {
             $sheet = $spreadSheet->createSheet();
             $sheet->setTitle($month);
 
@@ -65,9 +66,9 @@ class ReportGeneratorService
             }
 
             $i = 2;
-            foreach ($rows as $row) {
-                $sheet->setCellValue("A$i", $row['datetime']);
-                $sheet->setCellValue("B$i", $row['temperature']);
+            foreach ($rows as $measurement) {
+                $sheet->setCellValue("A$i", $measurement->getDateTime());
+                $sheet->setCellValue("B$i", $measurement->getTemperature());
                 $i++;
             }
 
@@ -104,10 +105,10 @@ class ReportGeneratorService
                 $dateTime = new DateTime($row['created_at']);
                 $month = $dateTime->format('Y-m');
 
-                $temperaturesGroupedByMonth[$month][] = [
-                    'temperature' => $row['value'],
-                    'datetime' => $dateTime->format('Y-m-d H:i:s')
-                ];
+                $measurement = new TemperatureMeasurement();
+
+                $temperaturesGroupedByMonth[$month][] = $measurement->setTemperature($row['value'])
+                                                                    ->setDatetime($dateTime->format('Y-m-d H:i:s'));
             } catch (Exception $e) {
                 echo $e->getMessage();
             }
