@@ -225,59 +225,22 @@ class AuthController
 
     private function attemptLogin(string $login, string $password): ?User
     {
-        $query = "
-            SELECT
-                u.id AS user_id,
-                u.login,
-                u.email,
-                u.password,
-                u.confirmed,
-                r.id AS role_id,
-                r.name AS role_name,
-                p.name AS permission_name
-            FROM users u
-            JOIN roles r ON u.role_id = r.id
-            LEFT JOIN role_permission rp ON rp.role_id = r.id
-            LEFT JOIN permissions p ON p.id = rp.permission_id
-            WHERE u.login = ?
-        ";
-            $stmt = $this->conn->prepare($query);
-            $stmt->execute([$login]);
-            $response = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $user = User::findByLogin($login);
 
-        if ($response == null) {
+        if ($user == null) {
             return null;
         }
-
-        $user = $response[0];
 
         if (!$user['confirmed']) {
             header("Location: /login?msg=activation");
             exit;
         }
 
-        if (!password_verify($password, $user['password'])) {
+        if (!password_verify($password, $user->getPasswordHash())) {
             header("Location: /login?msg=wrong_password");
             exit;
         }
 
-        $permissions = [];
-        foreach ($response as $row) {
-            if ($row['permission_name']) {
-                $permissions[] = $row['permission_name'];
-            }
-        }
-
-        $role = (new Role())
-                    ->setId($user['role_id'])
-                    ->setName($user['role_name'])
-                    ->setPermissions($permissions);
-
-        return (new User())
-                    ->setId($user['user_id'])
-                    ->setLogin($user['login'])
-                    ->setEmail($user['email'])
-                    ->setConfirmed($user['confirmed'])
-                    ->setRole($role);
+        return $user;
     }
 }
