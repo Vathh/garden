@@ -3,19 +3,14 @@
 namespace App\Service;
 
 use App\Core\Database;
-use DateTime;
-use DateTimeInterface;
-use Exception;
+use App\Model\TemperatureMeasurement;
 use PDO;
 
 class TemperatureService
 {
-
-    private PDO $conn;
     private String $url = "https://svr140.supla.org/direct/114/DbDsmcN3tNxUPvsT/read?format=json";
     public function __construct()
     {
-        $this->conn = Database::getInstance()->getConnection();
     }
 
     public function fetch(): ?float
@@ -38,12 +33,7 @@ class TemperatureService
     {
         $temperature = $this->fetch();
 
-        $query = "
-            INSERT INTO temperatures (sensor_id, value, created_at) VALUES (?, ?, ?);                                                            
-        ";
-
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute([114, $temperature, date('Y-m-d H:i:s')]);
+        TemperatureMeasurement::addToDbWithActualDate(114, $temperature);
     }
 
     public function getTemperatureDataForSelectedRange(string $range = '1h'): array
@@ -56,29 +46,6 @@ class TemperatureService
             default => '1 HOUR',
         };
 
-        $query = "
-            SELECT value, created_at
-            FROM temperatures
-            WHERE created_at >= NOW() - INTERVAL $interval
-            ORDER BY created_at ASC
-        ";
-
-        $stmt = $this->conn->prepare($query);
-
-        $stmt->execute();
-
-        $data = [];
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            try {
-                $data[] = [
-                    'datetime' => (new DateTime($row['created_at']))->format(DateTimeInterface::ATOM),
-                    'temperature' => floatval($row['value'])
-                ];
-            } catch (Exception $e) {
-                echo $e->getMessage();
-            }
-        }
-
-        return $data;
+        return TemperatureMeasurement::fetchFromLastPeriod($interval);
     }
 }

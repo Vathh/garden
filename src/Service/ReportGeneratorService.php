@@ -31,19 +31,13 @@ class ReportGeneratorService
 
     public function generateExcelReport(string $savePath): void
     {
-//        if (!is_writable(dirname($savePath))) {
-//            echo "Folder nie ma uprawnień do zapisu: " . dirname($savePath) . "\n";
-//        } else {
-//            echo "Folder jest zapisywalny" . dirname($savePath) . "\n";
-//        }
-
         $spreadSheet = new Spreadsheet();
 
         $spreadSheet->removeSheetByIndex(
             $spreadSheet->getIndex($spreadSheet->getActiveSheet())
         );
 
-        $temperaturesGroupedByMonth = $this->fetchTemperaturesGroupedByMonth();
+        $temperaturesGroupedByMonth = TemperatureMeasurement::fetchGroupedByMonth($this->conn);
 
         foreach ($temperaturesGroupedByMonth as $month => $rows) {
             $sheet = $spreadSheet->createSheet();
@@ -86,35 +80,6 @@ class ReportGeneratorService
                 echo "Błąd zapisu: " . $e->getMessage();
             }
         }
-    }
-
-    private function fetchTemperaturesGroupedByMonth(): array
-    {
-        $stmt = $this->conn->prepare("
-            SELECT value, created_at
-            FROM temperatures
-            ORDER BY created_at ASC
-        ");
-
-        $stmt->execute();
-
-        $temperaturesGroupedByMonth = [];
-
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            try {
-                $dateTime = new DateTime($row['created_at']);
-                $month = $dateTime->format('Y-m');
-
-                $measurement = new TemperatureMeasurement();
-
-                $temperaturesGroupedByMonth[$month][] = $measurement->setTemperature($row['value'])
-                                                                    ->setDatetime($dateTime->format('Y-m-d H:i:s'));
-            } catch (Exception $e) {
-                echo $e->getMessage();
-            }
-        }
-
-        return $temperaturesGroupedByMonth;
     }
 
     /**

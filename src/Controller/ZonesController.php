@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Core\Auth;
 use App\Core\Database;
 use App\Core\View;
+use App\Model\TemperatureMeasurement;
 use Exception;
 use PDO;
 
@@ -32,14 +33,11 @@ class ZonesController
     {
         Auth::requireAuth();
 
-        $stmt = $this->conn->prepare("SELECT value FROM temperatures ORDER BY created_at DESC LIMIT 1");
-        $stmt->execute();
-
-        $internalTemperature = $stmt->fetchColumn();
+        $lastMeasurement = TemperatureMeasurement::fetchLastMeasurement();
 
         try {
             View::render('pages.greenhouse', [
-                'internalTemperature' => round($internalTemperature, 1),
+                'internalTemperature' => round($lastMeasurement->getTemperature(), 1),
             ]);
         } catch (Exception $e) {
             echo "Błąd: " . $e->getMessage();

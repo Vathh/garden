@@ -5,14 +5,11 @@ namespace App\Controller;
 use App\Core\Auth;
 use App\Core\Database;
 use App\Core\View;
-use App\Model\Role;
 use App\Model\User;
-use DateMalformedStringException;
-use DateTime;
 use Exception;
 use JetBrains\PhpStorm\NoReturn;
 use PDO;
-use PDOException;
+use Random\RandomException;
 
 class AuthController
 {
@@ -86,6 +83,9 @@ class AuthController
         }
     }
 
+    /**
+     * @throws RandomException
+     */
     public function register(): void
     {
         if (isset($_POST['register'])) {
@@ -104,28 +104,14 @@ class AuthController
                 strlen($password) >= 5 &&
                 preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/', $password)
             ) {
-                try {
-                    $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-                    $token = bin2hex(random_bytes(32));
-                    $createdAt = date('Y-m-d H:i:s');
-                    $link = "http://localhost:8000/activate?token=$token";
-                    $message = "Kliknij w link aby aktywowac konto: \n\n$link";
-
-                    $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-                    $stmt = $this->conn->prepare("INSERT INTO users (login, email, password, role_id, activation_token, activation_token_created_at, confirmed) VALUES (?, ?, ?, ?, ?, ?, ?)");
-
-                    $stmt->execute([$login, $email, $passwordHash, 1, $token, $createdAt, 0]);
-
+                $token = bin2hex(random_bytes(32));
+                $link = "http://localhost:8000/activate?token=$token";
+                $message = "Kliknij w link aby aktywowac konto: \n\n$link";
+                if (User::add($login, $email, $password, $token)) {
                     mail($email, "Aktywacja konta Garden", $message, "From: no-reply@garden.pl");
                     header('Location:/login?msg=user_added');
-                } catch (Exception $e) {
-                    if ($e->getCode() == "23000") {
-                        echo"<script>alert('Użytkownik o podanym loginie lub emailu już istnieje.');</script><script>window.location='/register'</script>)";
-                    } else {
-                        echo $e->getMessage();
-                    }
-                    $conn = null;
+                } else {
+                    echo"<script>alert('Coś poszło nie tak, spróbuj ponownie');</script>)<script>window.location='/register'</script>";
                 }
             } else {
                 echo"<script>alert('Coś poszło nie tak, spróbuj ponownie');</script>)<script>window.location='/register'</script>";
@@ -137,35 +123,7 @@ class AuthController
     {
         $token = $_GET['token'] ?? '';
 
-        if ($token) {
-            $stmt = $this->conn->prepare("SELECT * FROM users WHERE activation_token = ?");
-            $stmt->execute([$token]);
-            $user = $stmt->fetch();
-
-            if ($user && !$user['confirmed']) {
-                try {
-                    $createdAt = new DateTime($user['activation_token_created_at']);
-                } catch (DateMalformedStringException $e) {
-                    echo "Błąd: " . $e->getMessage();
-                }
-                $now = new DateTime();
-                $interval = $createdAt->diff($now);
-
-                if ($interval->days > 15) {
-                    $stmt = $this->conn->prepare("DELETE FROM users WHERE activation_token = ?");
-                    $stmt->execute([$token]);
-                    die("Link do aktywacji wygasł.");
-                }
-
-                $stmt = $this->conn->prepare("UPDATE users SET confirmed = 1, activation_token = null WHERE activation_token = ?");
-                $stmt->execute([$token]);
-                echo "Konto zostało aktywowane.";
-            } else {
-                echo "Nieprawidłowy token lub konto zostało juz aktywowane.";
-            }
-        } else {
-            echo "Brak tokena aktywacyjnego.";
-        }
+        User::activate($token);
     }
 
     #[NoReturn] public function logout(): void
@@ -200,27 +158,7 @@ class AuthController
             die("Nowe hasła różnią się.");
         }
 
-        try {
-            $newPasswordHash = password_hash($newPassword, PASSWORD_DEFAULT);
-            $stmt = $this->conn->prepare("SELECT password FROM users WHERE id = ?");
-            $stmt->execute([$userId]);
-            $user = $stmt->fetch();
-
-            if (!$user || password_verify($oldPassword, $user['password'])) {
-                die("Nieprawidłowe stare hasło.");
-            }
-
-            $stmt = $this->conn->prepare("UPDATE users SET password = ? WHERE id = ?");
-            $stmt->execute([$newPasswordHash, $userId]);
-
-            session_unset();
-            session_destroy();
-
-            header("Location: /login?msg=password_changed");
-            exit;
-        } catch (PDOException $e) {
-            echo "Błąd: " . $e->getMessage();
-        }
+        User::changePassword($userId, $oldPassword, $newPassword);
     }
 
     private function attemptLogin(string $login, string $password): ?User
