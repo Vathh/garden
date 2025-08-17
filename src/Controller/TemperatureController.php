@@ -12,11 +12,8 @@ use PDO;
 
 class TemperatureController
 {
-    private PDO $conn;
-
     public function __construct()
     {
-        $this->conn = Database::getInstance()->getConnection();
     }
 
     #[NoReturn] public function getTemperatureChartDataJson(): void

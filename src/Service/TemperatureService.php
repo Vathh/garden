@@ -2,9 +2,7 @@
 
 namespace App\Service;
 
-use App\Core\Database;
 use App\Model\TemperatureMeasurement;
-use PDO;
 
 class TemperatureService
 {

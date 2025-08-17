@@ -16,14 +16,12 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class ReportGeneratorService
 {
-    private PDO $conn;
     private TemperatureService $temperatureService;
     private MeasurementsDataService $measurementsDataService;
     private ChartService $chartService;
 
     public function __construct()
     {
-        $this->conn = Database::getInstance()->getConnection();
         $this->temperatureService = new TemperatureService();
         $this->measurementsDataService = new MeasurementsDataService();
         $this->chartService = new ChartService();
@@ -37,7 +35,7 @@ class ReportGeneratorService
             $spreadSheet->getIndex($spreadSheet->getActiveSheet())
         );
 
-        $temperaturesGroupedByMonth = TemperatureMeasurement::fetchGroupedByMonth($this->conn);
+        $temperaturesGroupedByMonth = TemperatureMeasurement::fetchGroupedByMonth();
 
         foreach ($temperaturesGroupedByMonth as $month => $rows) {
             $sheet = $spreadSheet->createSheet();

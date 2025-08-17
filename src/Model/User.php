@@ -15,8 +15,6 @@ class User
     private string $login;
     private string $passwordHash;
     private string $email;
-
-
     private Role $role;
     private bool $confirmed;
 
@@ -78,6 +76,12 @@ class User
         return $this->confirmed;
     }
 
+    public function setPasswordHash(string $passwordHash): User
+    {
+        $this->passwordHash = $passwordHash;
+        return $this;
+    }
+
     public static function findByLogin(string $login): ?User
     {
         $conn = Database::getInstance()->getConnection();
@@ -123,6 +127,7 @@ class User
         return (new User())
             ->setId($user['user_id'])
             ->setLogin($user['login'])
+            ->setPasswordHash($user['password'])
             ->setEmail($user['email'])
             ->setConfirmed($user['confirmed'])
             ->setRole($role);

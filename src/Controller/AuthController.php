@@ -3,21 +3,16 @@
 namespace App\Controller;
 
 use App\Core\Auth;
-use App\Core\Database;
 use App\Core\View;
 use App\Model\User;
 use Exception;
 use JetBrains\PhpStorm\NoReturn;
-use PDO;
 use Random\RandomException;
 
 class AuthController
 {
-    private PDO $conn;
-
     public function __construct()
     {
-        $this->conn = Database::getInstance()->getConnection();
     }
 
     public function showLoginForm(): void
@@ -169,7 +164,7 @@ class AuthController
             return null;
         }
 
-        if (!$user['confirmed']) {
+        if (!$user->isConfirmed()) {
             header("Location: /login?msg=activation");
             exit;
         }

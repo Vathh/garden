@@ -19,7 +19,7 @@ class TemperatureMeasurement
 
     public function getDatetime(): string
     {
-        return $this->datetime;
+        return $this->dateTime;
     }
 
     public function setDatetime(string $dateTime): TemperatureMeasurement

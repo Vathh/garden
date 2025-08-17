@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Core\Auth;
 use App\Core\View;
+use App\Model\Report;
 use Exception;
 
 class PagesController
@@ -51,41 +52,41 @@ class PagesController
             fn($file) => str_ends_with($file, '.xlsx') || str_ends_with($file, '.pdf')
         );
 
-        $reportsSortedByDate = [];
+        $reports = [];
 
         foreach ($files as $file) {
-            preg_match('/temperature_report_(\d{8})_\d{6}\.(pdf|xlsx)/', $file, $matches);
+            if (preg_match('/temperature_report_(\d{8})_\d{6}\.(pdf|xlsx)/', $file, $matches)) {
+                if ($matches) {
+                    $date = $matches[1];
+                    $extension = $matches[2];
 
-            if ($matches) {
-                $date = $matches[1];
-                $extension = $matches[2];
+                    if (!isset($reports[$date])) {
+                        $reports[$date] = new Report($date);
+                    }
 
-                if (!isset($reportsSortedByDate[$date])) {
-                    $reportsSortedByDate[$date] = ['pdf' => null, 'xlsx' => null];
+                    if ($extension == 'pdf') {
+                        $reports[$date]->setPdfPath($file);
+                    }
+                    if ($extension == 'xlsx') {
+                        $reports[$date]->setXlsxPath($file);
+                    }
                 }
-
-                $reportsSortedByDate[$date][$extension] = $file;
             }
         }
 
-        krsort($reportsSortedByDate);
+        usort($reports, fn(Report $a, Report $b) => strcmp($b->getDate(), $a->getDate()));
 
-        $allReportsDates = array_keys($reportsSortedByDate);
-        $total = count($allReportsDates);
+
+        $total = count($reports);
         $totalPages = ceil($total / $perPage);
         $offset = ($page - 1) * $perPage;
 
-        $visibleReportDates = array_slice($allReportsDates, $offset, $perPage);
 
-        $visibleFiles = [];
-
-        foreach ($visibleReportDates as $date) {
-            $visibleFiles[$date] = $reportsSortedByDate[$date];
-        }
+        $visibleReports = array_slice($reports, $offset, $perPage);
 
         try {
             View::render('pages.reports', [
-                'files' => $visibleFiles,
+                'reports' => $visibleReports,
                 'url' => $url,
                 'page' => $page,
                 'perPage' => $perPage,

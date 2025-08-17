@@ -17,19 +17,19 @@
             <input type="hidden" name="page" value="1">
         </form>
 
-        @if(count($files) === 0)
+        @if(count($reports) === 0)
             <p class="noFiles">Brak plików.</p>
         @else
             <div class="reports">
-                @foreach($files as $date => $report)
+                @foreach($reports as $report)
                         <div class="reports__container">
-                            <p class="reports__container-date">{{ DateTime::createFromFormat('Ymd', $date)->format('Y-m-d') }}</p>
+                            <p class="reports__container-date">{{ $report->getFormattedDate() }}</p>
                             <span class="reports__container-menu">
-                                @if (isset($report['pdf']))
+                                @if ($report->hasPdf())
                                     <span>Raport PDF</span>
-                                    <a class="reports__container-link container__button-btn" href="{{ $url . '/' . rawurlencode($report['pdf']) }}" download>Pobierz</a>
+                                    <a class="reports__container-link container__button-btn" href="{{ $url . '/' . $report->getPdfPath() }}" download>Pobierz</a>
                                     <form class="reports__container-deleteForm" method="POST" action="/reports/delete" onsubmit="return confirm('Na pewno chcesz usunąć ten raport?');">
-                                        <input type="hidden" name="fileName" value="{{ $report['pdf'] }}">
+                                        <input type="hidden" name="fileName" value="{{ $report->getPdfPath() }}">
                                         <button class="reports__container-link container__button-btn" type="submit">Usuń</button>
                                     </form>
                                 @else
@@ -38,11 +38,11 @@
                             </span>
                             <div class="reports__container-separator"></div>
                             <span class="reports__container-menu">
-                                @if (isset($report['xlsx']))
+                                @if ($report->hasXlsx())
                                     <span>Raport Excel</span>
-                                    <a class="container__button-btn reports__container-link" href="{{ $url . '/' . rawurlencode($report['xlsx']) }}" download>Pobierz</a>
+                                    <a class="container__button-btn reports__container-link" href="{{ $url . '/' . $report->getXlsxPath() }}" download>Pobierz</a>
                                     <form class="reports__container-deleteForm" method="POST" action="/reports/delete" onsubmit="return confirm('Na pewno chcesz usunąć ten raport?');">
-                                        <input type="hidden" name="fileName" value="{{ $report['xlsx'] }}">
+                                        <input type="hidden" name="fileName" value="{{ $report->getXlsxPath() }}">
                                         <button class="container__button-btn reports__container-link" type="submit">Usuń</button>
                                     </form>
                                 @else

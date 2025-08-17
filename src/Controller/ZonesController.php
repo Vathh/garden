@@ -11,11 +11,8 @@ use PDO;
 
 class ZonesController
 {
-    private PDO $conn;
-
     public function __construct()
     {
-        $this->conn = Database::getInstance()->getConnection();
     }
 
     public function showZonesMenuPage(): void
