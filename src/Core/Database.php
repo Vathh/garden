@@ -12,11 +12,11 @@ class Database
 
     private function __construct()
     {
-        $db_host = "127.0.0.1";
-        $db_name = "garden";
-        $db_port = "3306";
-        $db_username = 'root';
-        $db_password = '';
+        $db_host = config('BASE_URL');
+        $db_name = config('DB_NAME');
+        $db_port = config('DB_PORT');
+        $db_username = config('DB_USER');
+        $db_password = config('DB_PASSWORD');
 
         try {
             $this->connection = new PDO(

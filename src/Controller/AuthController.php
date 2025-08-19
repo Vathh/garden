@@ -8,6 +8,7 @@ use App\Model\User;
 use Exception;
 use JetBrains\PhpStorm\NoReturn;
 use Random\RandomException;
+use function App\Core\config;
 
 class AuthController
 {
@@ -100,10 +101,11 @@ class AuthController
                 preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/', $password)
             ) {
                 $token = bin2hex(random_bytes(32));
-                $link = "http://localhost:8000/activate?token=$token";
+                $link = config('BASE_URL') . "/activate?token=$token";
                 $message = "Kliknij w link aby aktywowac konto: \n\n$link";
+                $mailFrom = config('MAIL_FROM');
                 if (User::add($login, $email, $password, $token)) {
-                    mail($email, "Aktywacja konta Garden", $message, "From: no-reply@garden.pl");
+                    mail($email, "Aktywacja konta Garden", $message, "From: {$mailFrom}");
                     header('Location:/login?msg=user_added');
                 } else {
                     echo"<script>alert('Coś poszło nie tak, spróbuj ponownie');</script>)<script>window.location='/register'</script>";
