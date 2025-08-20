@@ -12,7 +12,7 @@ class Database
 
     private function __construct()
     {
-        $db_host = config('BASE_URL');
+        $db_host = config('DB_HOST');
         $db_name = config('DB_NAME');
         $db_port = config('DB_PORT');
         $db_username = config('DB_USER');

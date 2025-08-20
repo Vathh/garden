@@ -7,7 +7,6 @@ use App\Controller\TemperatureController;
 use App\Core\Router;
 use App\Controller\AuthController;
 use App\Controller\PagesController;
-use App\Service\ReportGeneratorService;
 
 session_start();
 

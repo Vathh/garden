@@ -1,7 +1,5 @@
 <?php
 
-namespace App\Core;
-
 function config(string $key)
 {
     static $config = null;
