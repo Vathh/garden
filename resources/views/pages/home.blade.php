@@ -8,7 +8,7 @@
     <div class="container">
         <div class="header__container">
             <h1 class="header__container-title">Mój ogród</h1>
-            <p class="header__container-comment">Witaj ponownie Konradzie! Twój ogród ma się świetnie.</p>
+            <p class="header__container-comment">Witaj ponownie {{ $userName }}! Twój ogród ma się świetnie.</p>
         </div>
 
         <div class="monitoring wrapper">

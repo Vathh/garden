@@ -8,7 +8,7 @@ function loadChart(range)
     fetch(`/temperature?range=` + range)
         .then(res => res.json())
         .then(data => {
-            const labels = data.map(d => d.datetime);
+            const labels = data.map(d => d.dateTime);
             const temps = data.map(d => d.temperature);
 
             if (chart) {

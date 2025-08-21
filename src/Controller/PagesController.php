@@ -13,8 +13,12 @@ class PagesController
     {
         Auth::requireAuth();
 
+        $userName = isset($_SESSION['user']) ? $_SESSION['user']->getLogin() : 'Użytkownik';
+
         try {
-            View::render('pages.home');
+            View::render('pages.home', [
+                'userName' => $userName
+            ]);
         } catch (Exception $e) {
             echo "Błąd: " . $e->getMessage();
         }

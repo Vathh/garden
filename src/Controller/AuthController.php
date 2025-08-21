@@ -8,7 +8,7 @@ use App\Model\User;
 use Exception;
 use JetBrains\PhpStorm\NoReturn;
 use Random\RandomException;
-use function App\Core\config;
+use function config;
 
 class AuthController
 {
@@ -62,11 +62,10 @@ class AuthController
                 $_SESSION['user'] = $user;
                 $_SESSION['last_activity'] = time();
                 header("Location: / ");
-                exit;
             } else {
                 header("Location: /login?msg=wrong_password");
-                exit;
             }
+            exit;
         }
     }
 
