@@ -7,6 +7,7 @@ use App\Controller\TemperatureController;
 use App\Core\Router;
 use App\Controller\AuthController;
 use App\Controller\PagesController;
+use App\Controller\TodoController;
 
 session_start();
 
@@ -38,6 +39,8 @@ $router->get('/temperature', [TemperatureController::class, 'getTemperatureChart
 
 $router->get('/reports', [PagesController::class, 'showReportsPage']);
 $router->post('/reports/delete', [PagesController::class, 'deleteReportFile']);
+
+$router->get('/todos', [TodoController::class, 'showTodosPage']);
 
 //$router->get('/podglad-raportu', [ReportGeneratorService::class, 'generatePDFReport']);
 

@@ -1,0 +1,59 @@
+.todo__header{
+
+}
+
+.todo__form{
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.todo__form-container{
+    display: flex;
+    flex-direction: column;"
+}
+
+.todo__form-container-label{
+
+}
+
+.todo__form-container-input{
+
+}
+
+.todo__form-container-btn{
+
+}
+
+.todo__container{
+    min-width: 500px;
+    margin-top: 10px;
+}
+
+.todo__container-box{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border: 1px solid #000;
+    border-bottom: none;
+}
+
+.todo__container-box-item{
+    flex: 1;
+}
+
+.todo__container-box-item-title{
+
+}
+
+.todo__container-box-item-deadline{
+    font-size: 14px;
+    color: #555;
+}
+
+.todo__container-box-menu{
+    display: flex;
+    gap: 8px;
+}

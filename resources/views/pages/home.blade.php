@@ -62,8 +62,8 @@
                         <svg><use xlink:href="#leaf"></use></svg>
                     </div>
                     <div class="tasks__container-row-description">
-                        <span class="tasks__container-row-description-subject">Pomidory</span>
-                        <span class="tasks__container-row-description-activity">Podlewanie</span>
+                        <span class="tasks__container-row-description-subject">Podlewanie pomidorow</span>
+{{--                        <span class="tasks__container-row-description-activity">Podlewanie</span>--}}
                     </div>
                     <div class="tasks__container-row-deadline">
                         <span class="tasks__container-row-deadline-value">Dziś</span>
@@ -74,8 +74,8 @@
                         <svg><use xlink:href="#leaf"></use></svg>
                     </div>
                     <div class="tasks__container-row-description">
-                        <span class="tasks__container-row-description-subject">Sałata</span>
-                        <span class="tasks__container-row-description-activity">Nawożenie</span>
+                        <span class="tasks__container-row-description-subject">Nawozenie sałaty</span>
+{{--                        <span class="tasks__container-row-description-activity">Nawożenie</span>--}}
                     </div>
                     <div class="tasks__container-row-deadline">
                         <span class="tasks__container-row-deadline-value">Jutro</span>
@@ -86,8 +86,8 @@
                         <svg><use xlink:href="#leaf"></use></svg>
                     </div>
                     <div class="tasks__container-row-description">
-                        <span class="tasks__container-row-description-subject">Róże</span>
-                        <span class="tasks__container-row-description-activity">Przycinanie</span>
+                        <span class="tasks__container-row-description-subject">Przycinanie róż</span>
+{{--                        <span class="tasks__container-row-description-activity">Przycinanie</span>--}}
                     </div>
                     <div class="tasks__container-row-deadline">
                         <span class="tasks__container-row-deadline-value">Za 2 dni</span>
