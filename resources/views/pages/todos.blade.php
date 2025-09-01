@@ -12,8 +12,8 @@
                 <input class="todo__form-container-input" id="title" name="title" type="text" required placeholder="np. Podlać paprykę" style="min-width:300px;">
             </div>
             <div class="todo__form-container">
-                <label class="todo__form-container-label" for="due_date">Termin</label>
-                <input class="todo__form-container-input" id="due_date" name="due_date" type="date">
+                <label class="todo__form-container-label" for="deadline">Termin</label>
+                <input class="todo__form-container-input" id="deadline" name="deadline" type="date">
             </div>
             <button type="submit" class="todo__form-container-btn">Dodaj</button>
         </form>
@@ -23,17 +23,18 @@
         @else
             <div class="todo__container">
                 @foreach ($todos as $todo)
-                    <div class="todo__container-box">
-                        <div class="todo__container-box-item">
-                            <div class="todo__container-box-item-title">
-                                {{ $todo->getTitle() }}
-                            </div>
-                            <div class="todo__container-box-item-deadline">
-                                Termin: {{ $todo->getDeadline() ?? '—' }}
-                            </div>
+                    <div class="tasks__container-row">
+                        <div class="tasks__container-row-icon">
+                            <svg><use xlink:href="#leaf"></use></svg>
                         </div>
-                        <div class="todo__container-box-menu">
-                            <form method="POST" action="/todos/toggle">
+                        <div class="tasks__container-row-description">
+                            <span class="tasks__container-row-description-subject">{{ $todo->getTitle() }}</span>
+                        </div>
+                        <div class="tasks__container-row-deadline">
+                            <span class="tasks__container-row-deadline-value">{{ $todo->getDeadlineDiff() ?? '—' }}</span>
+                        </div>
+                        <div class="tasks__container-row-menu">
+                            <form method="POST" action="/todos/done">
                                 <input type="hidden" name="id" value="{{ $todo->getId() }}">
                                 <button type="submit">
                                     Zrobione

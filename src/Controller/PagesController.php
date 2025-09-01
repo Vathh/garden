@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Core\Auth;
 use App\Core\View;
 use App\Model\Report;
+use App\Model\Todo;
 use Exception;
 
 class PagesController
@@ -16,8 +17,10 @@ class PagesController
         $userName = isset($_SESSION['user']) ? $_SESSION['user']->getLogin() : 'Użytkownik';
 
         try {
+            $todos = array_slice(Todo::getAllUndone(), 0, 5);
             View::render('pages.home', [
-                'userName' => $userName
+                'userName' => $userName,
+                'todos' => $todos
             ]);
         } catch (Exception $e) {
             echo "Błąd: " . $e->getMessage();

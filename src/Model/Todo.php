@@ -119,4 +119,21 @@ class Todo
         $stmt->execute([$id]);
         return $stmt->rowCount() > 0;
     }
+
+    public function getDeadlineDiff(): ?string
+    {
+        if ($this->deadline === null) {
+            return null;
+        }
+
+        $deadline = date_create_from_format('Y-m-d', $this->deadline);
+        $today = date_create(date('Y-m-d'));
+        $diff = (int)date_diff($today, $deadline)->format('%r%a');
+
+        return match ($diff) {
+            0 => 'Dzisiaj',
+            1 => 'Jutro',
+            default => "Za {$diff} dni"
+        };
+    }
 }

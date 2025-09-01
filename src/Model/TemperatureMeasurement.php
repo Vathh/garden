@@ -111,7 +111,7 @@ class TemperatureMeasurement
         return $data;
     }
 
-    public static function fetchLastMeasurement(): TemperatureMeasurement
+    public static function fetchLastMeasurement(): ?TemperatureMeasurement
     {
         $conn = Database::getInstance()->getConnection();
 
@@ -119,6 +119,10 @@ class TemperatureMeasurement
         $stmt->execute();
 
         $measurementData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$measurementData) {
+            return null;
+        }
 
         $measurement = new TemperatureMeasurement();
 

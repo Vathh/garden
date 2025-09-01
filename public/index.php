@@ -41,6 +41,8 @@ $router->get('/reports', [PagesController::class, 'showReportsPage']);
 $router->post('/reports/delete', [PagesController::class, 'deleteReportFile']);
 
 $router->get('/todos', [TodoController::class, 'showTodosPage']);
+$router->post('/todos', [TodoController::class, 'add']);
+$router->post('/todos/done', [TodoController::class, 'setDone']);
 
 //$router->get('/podglad-raportu', [ReportGeneratorService::class, 'generatePDFReport']);
 

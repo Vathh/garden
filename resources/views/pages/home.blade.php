@@ -56,44 +56,33 @@
 
         <div class="tasks wrapper">
             <h2 class="title">Zadania</h2>
-            <div class="tasks__container">
-                <div class="tasks__container-row">
-                    <div class="tasks__container-row-icon">
-                        <svg><use xlink:href="#leaf"></use></svg>
-                    </div>
-                    <div class="tasks__container-row-description">
-                        <span class="tasks__container-row-description-subject">Podlewanie pomidorow</span>
-{{--                        <span class="tasks__container-row-description-activity">Podlewanie</span>--}}
-                    </div>
-                    <div class="tasks__container-row-deadline">
-                        <span class="tasks__container-row-deadline-value">Dziś</span>
-                    </div>
+            @if (empty($todos))
+                <p class="noFiles">Brak zadań.</p>
+            @else
+                <div class="tasks__container">
+                    @foreach ($todos as $todo)
+                        <div class="tasks__container-row">
+                            <div class="tasks__container-row-icon">
+                                <svg><use xlink:href="#leaf"></use></svg>
+                            </div>
+                            <div class="tasks__container-row-description">
+                                <span class="tasks__container-row-description-subject">{{ $todo->getTitle() }}</span>
+                            </div>
+                            <div class="tasks__container-row-deadline">
+                                <span class="tasks__container-row-deadline-value">{{ $todo->getDeadlineDiff() ?? '—' }}</span>
+                            </div>
+                            <div class="tasks__container-row-menu">
+                                <form method="POST" action="/todos/done">
+                                    <input type="hidden" name="id" value="{{ $todo->getId() }}">
+                                    <button type="submit">
+                                        Zrobione
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
-                <div class="tasks__container-row">
-                    <div class="tasks__container-row-icon">
-                        <svg><use xlink:href="#leaf"></use></svg>
-                    </div>
-                    <div class="tasks__container-row-description">
-                        <span class="tasks__container-row-description-subject">Nawozenie sałaty</span>
-{{--                        <span class="tasks__container-row-description-activity">Nawożenie</span>--}}
-                    </div>
-                    <div class="tasks__container-row-deadline">
-                        <span class="tasks__container-row-deadline-value">Jutro</span>
-                    </div>
-                </div>
-                <div class="tasks__container-row">
-                    <div class="tasks__container-row-icon">
-                        <svg><use xlink:href="#leaf"></use></svg>
-                    </div>
-                    <div class="tasks__container-row-description">
-                        <span class="tasks__container-row-description-subject">Przycinanie róż</span>
-{{--                        <span class="tasks__container-row-description-activity">Przycinanie</span>--}}
-                    </div>
-                    <div class="tasks__container-row-deadline">
-                        <span class="tasks__container-row-deadline-value">Za 2 dni</span>
-                    </div>
-                </div>
-            </div>
+            @endif
         </div>
     </div>
 @endsection
