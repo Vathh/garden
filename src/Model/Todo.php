@@ -79,7 +79,7 @@ class Todo
             SELECT id, title, deadline, is_done, created_at
             FROM todos
             WHERE is_done = 0
-            ORDER BY created_at DESC
+            ORDER BY deadline ASC
         ";
 
         $stmt = $conn->prepare($query);
@@ -131,9 +131,10 @@ class Todo
         $diff = (int)date_diff($today, $deadline)->format('%r%a');
 
         return match ($diff) {
+            -1 => 'Wczoraj',
             0 => 'Dzisiaj',
             1 => 'Jutro',
-            default => "Za {$diff} dni"
+            default => $diff > 0 ? "Za {$diff} dni" : "{$diff} dni temu",
         };
     }
 }

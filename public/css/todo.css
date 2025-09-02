@@ -4,26 +4,29 @@
 
 .todo__form{
     display: flex;
-    align-items: flex-end;
+    flex-direction: column;
+    align-items: center;
     gap: 10px;
     margin-bottom: 20px;
 }
 
 .todo__form-container{
     display: flex;
-    flex-direction: column;"
+    flex-direction: column;
+    align-items: center;
 }
 
 .todo__form-container-label{
-
+    margin-bottom: 5px;
 }
 
 .todo__form-container-input{
-
+    border-radius: 5px;
+    padding: 7px;
 }
 
 .todo__form-container-btn{
-
+    margin-left: 0;
 }
 
 .todo__container{

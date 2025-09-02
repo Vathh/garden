@@ -15,7 +15,7 @@
                 <label class="todo__form-container-label" for="deadline">Termin</label>
                 <input class="todo__form-container-input" id="deadline" name="deadline" type="date">
             </div>
-            <button type="submit" class="todo__form-container-btn">Dodaj</button>
+            <button type="submit" class="grayBtn todo__form-container-btn">Dodaj</button>
         </form>
 
         @if (empty($todos))
@@ -36,7 +36,7 @@
                         <div class="tasks__container-row-menu">
                             <form method="POST" action="/todos/done">
                                 <input type="hidden" name="id" value="{{ $todo->getId() }}">
-                                <button type="submit">
+                                <button class="grayBtn" type="submit">
                                     Zrobione
                                 </button>
                             </form>

@@ -74,7 +74,7 @@
                             <div class="tasks__container-row-menu">
                                 <form method="POST" action="/todos/done">
                                     <input type="hidden" name="id" value="{{ $todo->getId() }}">
-                                    <button type="submit">
+                                    <button class="grayBtn" type="submit">
                                         Zrobione
                                     </button>
                                 </form>
