@@ -4,6 +4,7 @@
 @import "nav.css";
 @import "loginPanel.css";
 @import "reports.css";
+@import "todo.css";
 
 body, html {
     margin: 0;
@@ -39,7 +40,7 @@ main{
 }
 
 .container__button{
-    margin-bottom: 15px;
+    /*margin-bottom: 15px;*/
 }
 
 .container__button-btn{
@@ -52,6 +53,7 @@ main{
     transition: color .3s, background-color .3s;
     font-weight: bold;
     font-size: 18px;
+    margin-bottom: 15px;
 
     &:hover{
         border: 1px solid transparent;

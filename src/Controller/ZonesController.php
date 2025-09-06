@@ -32,9 +32,11 @@ class ZonesController
 
         $lastMeasurement = TemperatureMeasurement::fetchLastMeasurement();
 
+        $internalTemperature = $lastMeasurement !== null ? round($lastMeasurement->getTemperature(), 1) . "°C" : 'Brak danych';
+
         try {
             View::render('pages.greenhouse', [
-                'internalTemperature' => round($lastMeasurement->getTemperature(), 1),
+                'internalTemperature' => $internalTemperature,
             ]);
         } catch (Exception $e) {
             echo "Błąd: " . $e->getMessage();

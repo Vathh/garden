@@ -9,7 +9,7 @@
             </div>
             <div class="greenhouse__field">
                 <span class="greenhouse__field-desc">Temperatura wewnątrz</span>
-                <span class="greenhouse__field-value">{{ $internalTemperature }}°C</span>
+                <span class="greenhouse__field-value">{{ $internalTemperature }}</span>
             </div>
         </div>
         <div class="greenhouse__field">

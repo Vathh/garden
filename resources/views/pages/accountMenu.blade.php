@@ -8,6 +8,7 @@
             <button type="submit" class="container__button-btn">Zmień hasło</button>
         </form>
         <a class="container__link container__button-btn" href="/reports">Raporty dobowe</a>
+        <a class="container__link container__button-btn" href="/todos">Lista zadań</a>
     </div>
 @endsection
 
