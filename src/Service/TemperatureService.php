@@ -44,6 +44,6 @@ class TemperatureService
             default => '1 HOUR',
         };
 
-        return TemperatureMeasurement::fetchFromLastPeriod($interval);
+        return TemperatureMeasurement::fetchFromLastPeriodAndAggregate($interval);
     }
 }

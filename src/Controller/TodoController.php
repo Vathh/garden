@@ -67,10 +67,11 @@ class TodoController
         Auth::requireAuth();
 
         $id = (int)$_POST['id'] ?? '';
+        $redirect = $_POST['redirect'] ?? '/todos';
         if ($id > 0) {
             Todo::setDone($id);
         }
-        header('Location: /todos');
+        header("Location: {$redirect}");
         exit;
     }
 }

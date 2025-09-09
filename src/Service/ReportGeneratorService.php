@@ -17,13 +17,11 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 class ReportGeneratorService
 {
     private TemperatureService $temperatureService;
-    private MeasurementsDataService $measurementsDataService;
     private ChartService $chartService;
 
     public function __construct()
     {
         $this->temperatureService = new TemperatureService();
-        $this->measurementsDataService = new MeasurementsDataService();
         $this->chartService = new ChartService();
     }
 
@@ -65,11 +63,11 @@ class ReportGeneratorService
             }
 
             $sheet->setCellValue('C2', count($rows));
-            $sheet->setCellValue('D2', $this->measurementsDataService->getAverageTemperature($rows));
-            $sheet->setCellValue('E2', $this->measurementsDataService->getHighestTemperature($rows));
-            $sheet->setCellValue('F2', $this->measurementsDataService->getLowestTemperature($rows));
-            $sheet->setCellValue('G2', $this->measurementsDataService->getHottestDay($rows)['date']);
-            $sheet->setCellValue('G3', $this->measurementsDataService->getHottestDay($rows)['average']);
+            $sheet->setCellValue('D2', MeasurementsDataService::getAverageTemperature($rows));
+            $sheet->setCellValue('E2', MeasurementsDataService::getHighestTemperature($rows));
+            $sheet->setCellValue('F2', MeasurementsDataService::getLowestTemperature($rows));
+            $sheet->setCellValue('G2', MeasurementsDataService::getHottestDay($rows)['date']);
+            $sheet->setCellValue('G3', MeasurementsDataService::getHottestDay($rows)['average']);
 
             $writer = new Xlsx($spreadSheet);
             try {
@@ -87,7 +85,7 @@ class ReportGeneratorService
     public function generatePDFReport(string $path): void
     {
         $measurements = $this->temperatureService->getTemperatureDataForSelectedRange('30d');
-        $splitMeasurements = $this->measurementsDataService->splitMeasurementsByDatetime($measurements);
+        $splitMeasurements = MeasurementsDataService::splitMeasurementsByDatetime($measurements);
         $mpdf = new Mpdf();
 
         ob_start();
@@ -109,11 +107,11 @@ class ReportGeneratorService
         }
 
         $totalMeasurements = count($measurements);
-        $averageTemperature = $this->measurementsDataService->getAverageTemperature($measurements);
-        $maxTemperature = $this->measurementsDataService->getHighestTemperature($measurements);
-        $minTemperature = $this->measurementsDataService->getLowestTemperature($measurements);
-        $hottestDay = $this->measurementsDataService->getHottestDay($measurements)['date'];
-        $hottestDayAverage = $this->measurementsDataService->getHottestDay($measurements)['average'];
+        $averageTemperature = MeasurementsDataService::getAverageTemperature($measurements);
+        $maxTemperature = MeasurementsDataService::getHighestTemperature($measurements);
+        $minTemperature = MeasurementsDataService::getLowestTemperature($measurements);
+        $hottestDay = MeasurementsDataService::getHottestDay($measurements)['date'];
+        $hottestDayAverage = MeasurementsDataService::getHottestDay($measurements)['average'];
 
         require __DIR__ . "/../../templates/report.html.php";
 

@@ -9,7 +9,7 @@ use Exception;
 
 class MeasurementsDataService
 {
-    public function getAverageTemperature(array $measurements): float
+    public static function getAverageTemperature(array $measurements): float
     {
         $measurementsCount = count($measurements);
         $temperaturesSum = 0;
@@ -19,7 +19,7 @@ class MeasurementsDataService
         return round($temperaturesSum / $measurementsCount, 2);
     }
 
-    public function getHighestTemperature(array $measurements): float
+    public static function getHighestTemperature(array $measurements): float
     {
         $highestTemperature = 0;
         foreach ($measurements as $measurement) {
@@ -30,7 +30,7 @@ class MeasurementsDataService
         return round($highestTemperature, 2);
     }
 
-    public function getHottestDay(array $measurements): array
+    public static function getHottestDay(array $measurements): array
     {
         $averages = [];
 
@@ -64,7 +64,7 @@ class MeasurementsDataService
         return ['date' => $hottestDate, 'average' => round($highestAverage, 2)];
     }
 
-    public function getLowestTemperature(array $measurements): float
+    public static function getLowestTemperature(array $measurements): float
     {
         $lowestTemperature = 100;
         foreach ($measurements as $measurement) {
@@ -75,7 +75,7 @@ class MeasurementsDataService
         return round($lowestTemperature, 2);
     }
 
-    public function getAggregatedMeasurement(array $measurements): TemperatureMeasurement
+    public static function getAverageMeasurement(array $measurements): TemperatureMeasurement
     {
         $result = new TemperatureMeasurement();
         if (empty($measurements)) {
@@ -83,22 +83,34 @@ class MeasurementsDataService
         }
 
         $averageDateTime = $measurements[intval(count($measurements) / 2)]->getDateTime() ?? null;
-        $averageTemperature = $this->getAverageTemperature($measurements);
+        $averageTemperature =self::getAverageTemperature($measurements);
 
         return $result->setDatetime($averageDateTime)->setTemperature($averageTemperature);
     }
 
-    public function splitMeasurementsIntoSmallerGroups(array $measurements, int $splitArraysGroups): array
+    public static function splitMeasurementsIntoSmallerGroups(array $measurements, int $splitArraysGroups): array
     {
         $splitArraySize = max(1, (int)floor(count($measurements) / $splitArraysGroups));
 
         return array_chunk($measurements, $splitArraySize);
     }
+    
+    public static function aggregateMeasurements(array $measurements, int $resultArraySize): array
+    {
+        $splitMeasurements = self::splitMeasurementsIntoSmallerGroups($measurements, $resultArraySize);
+        
+        $result = [];
+        foreach ($splitMeasurements as $chunk) {
+            $result[] = self::getAverageMeasurement($chunk);
+        }
+        
+        return $result;
+    }
 
     /**
      * @throws DateMalformedStringException
      */
-    public function splitMeasurementsByDatetime(array $measurements): array
+    public static function splitMeasurementsByDatetime(array $measurements): array
     {
         $oneDayBack = (new DateTime())->modify('-1 day');
         $oneWeekBack = (new DateTime())->modify('-7 days');

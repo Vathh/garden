@@ -9,11 +9,8 @@ use QuickChart;
 
 class ChartService
 {
-    private MeasurementsDataService $measurementsDataService;
-
     public function __construct()
     {
-        $this->measurementsDataService = new MeasurementsDataService();
     }
 
     private function reduceLabels(array $labels, int $reducedLabelsCount): array
@@ -38,12 +35,7 @@ class ChartService
         $finalMeasurements = [];
 
         if (count($measurements) > $chartPointsCount) {
-            $splitMeasurements = $this->measurementsDataService
-                                    ->splitMeasurementsIntoSmallerGroups($measurements, $chartPointsCount);
-
-            foreach ($splitMeasurements as $chunk) {
-                $finalMeasurements[] = $this->measurementsDataService->getAggregatedMeasurement($chunk);
-            }
+            $finalMeasurements = MeasurementsDataService::aggregateMeasurements($measurements, $chartPointsCount);
         } else {
             $finalMeasurements = $measurements;
         }

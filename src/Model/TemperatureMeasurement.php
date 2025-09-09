@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use App\Core\Database;
+use App\Service\MeasurementsDataService;
 use DateTime;
 use DateTimeInterface;
 use Exception;
@@ -82,7 +83,7 @@ class TemperatureMeasurement
         $stmt->execute([$sensorId, $value, date('Y-m-d H:i:s')]);
     }
 
-    public static function fetchFromLastPeriod($interval): array
+    public static function fetchFromLastPeriodAndAggregate($interval): array
     {
         $conn = Database::getInstance()->getConnection();
 
@@ -108,7 +109,7 @@ class TemperatureMeasurement
             }
         }
 
-        return $data;
+        return MeasurementsDataService::aggregateMeasurements($data, 100);
     }
 
     public static function fetchLastMeasurement(): ?TemperatureMeasurement
