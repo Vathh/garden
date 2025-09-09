@@ -4,4 +4,4 @@
 /storage/cache/*
 !storage/cache/.gitkeep
 
-/config/env.php
+config/env.php
