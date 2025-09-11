@@ -12,10 +12,6 @@ use PDO;
 
 class TemperatureController
 {
-    public function __construct()
-    {
-    }
-
     #[NoReturn] public function getTemperatureChartDataJson(): void
     {
         $range = $_GET["range"] ?? '1h';

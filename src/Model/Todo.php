@@ -4,6 +4,7 @@ namespace App\Model;
 
 use App\Core\Database;
 use DateTime;
+use DateTimeImmutable;
 use PDO;
 
 class Todo
@@ -136,5 +137,31 @@ class Todo
             1 => 'Jutro',
             default => $diff > 0 ? "Za {$diff} dni" : "{$diff} dni temu",
         };
+    }
+
+    /**
+     * @throws \DateMalformedStringException
+     */
+    public static function splitByDeadline(array $todos): array
+    {
+        $today = new DateTimeImmutable('today');
+
+        $pastOrToday = [];
+        $future = [];
+
+        foreach ($todos as $todo) {
+            $deadline = new DateTimeImmutable($todo->getDeadline());
+
+            if ($deadline <= $today) {
+                $pastOrToday[] = $todo;
+            } else {
+                $future[] = $todo;
+            }
+        }
+
+        return [
+            'pastOrToday' => $pastOrToday,
+            'future' => $future,
+        ];
     }
 }

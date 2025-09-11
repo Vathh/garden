@@ -18,6 +18,7 @@ class TemperatureService
         if ($json === false) {
             return null;
         }
+
         $data = json_decode($json, true);
 
         if (!$data['connected'] || !isset($data['temperature'])) {

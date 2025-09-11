@@ -15,19 +15,20 @@
             <h2 class="title">Przegląd ogrodu</h2>
             <div class="overview__container">
                 <div class="overview__container-field">
-                    <span class="overview__container-field-title">Rośliny</span>
-                    <span class="overview__container-field-value">12</span>
-                    <span class="overview__container-field-diff">+2</span>
+                    <span class="overview__container-field-title">Temperatura</span>
+                    <span class="overview__container-field-value">Wewnątrz : 12</span>
+                    <span class="overview__container-field-diff">Na zewnątrz : +2</span>
                 </div>
                 <div class="overview__container-field">
                     <span class="overview__container-field-title">Zadania</span>
-                    <span class="overview__container-field-value">3</span>
-                    <span class="overview__container-field-diff">-1</span>
+                    <span class="overview__container-field-red">{{ $urgentTodosCount }}</span>
+                    <span class="overview__container-field-green">{{ $nonUrgentTodosCount }}</span>
                 </div>
                 <div class="overview__container-field">
                     <span class="overview__container-field-title">Nawadnianie</span>
-                    <span class="overview__container-field-value">2</span>
-                    <span class="overview__container-field-diff">+1</span>
+                    <span class="overview__container-field-red">{{ $lowHumidityCount }}</span>
+                    <span class="overview__container-field-yellow">{{ $mediumHumidityCount }}</span>
+                    <span class="overview__container-field-green">{{ $highHumidityCount }}</span>
                 </div>
             </div>
         </div>

@@ -6,21 +6,54 @@ use App\Core\Auth;
 use App\Core\View;
 use App\Model\Report;
 use App\Model\Todo;
+use App\Service\HumidityService;
 use Exception;
 
 class PagesController
 {
+    /**
+     * @throws \DateMalformedStringException
+     */
     public function showHomePage(): void
     {
         Auth::requireAuth();
 
         $userName = isset($_SESSION['user']) ? $_SESSION['user']->getLogin() : 'Użytkownik';
+        $humidityMeasurements = HumidityService::fetchAll();
+
+        $lowHumidity = [];
+        $mediumHumidity = [];
+        $highHumidity = [];
+
+        foreach ($humidityMeasurements as $measurement) {
+            if ($measurement->getHumidity() > 15) {
+                if ($measurement->getHumidity() > 25) {
+                    $highHumidity[] = $measurement;
+                } else {
+                    $mediumHumidity[] = $measurement;
+                }
+            } else {
+                $lowHumidity[] = $measurement;
+            }
+        }
+
+        $todos = Todo::getAllUndone();
+
+        $splitTodos = Todo::splitByDeadline($todos);
+        $urgentTodosCount = count($splitTodos['pastOrToday']);
+        $nonUrgentTodosCount = count($splitTodos['future']);
 
         try {
             $todos = array_slice(Todo::getAllUndone(), 0, 5);
+
             View::render('pages.home', [
                 'userName' => $userName,
-                'todos' => $todos
+                'todos' => $todos,
+                'lowHumidityCount' => count($lowHumidity),
+                'mediumHumidityCount' => count($mediumHumidity),
+                'highHumidityCount' => count($highHumidity),
+                'urgentTodosCount' => $urgentTodosCount,
+                'nonUrgentTodosCount' => $nonUrgentTodosCount,
             ]);
         } catch (Exception $e) {
             echo "Błąd: " . $e->getMessage();
