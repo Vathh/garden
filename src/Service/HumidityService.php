@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Model\HumidityMeasurement;
+use Exception;
 
 class HumidityService
 {
@@ -31,6 +32,9 @@ class HumidityService
         return $humidityMeasurements;
     }
 
+    /**
+     * @throws Exception
+     */
     public function fetchBySensorId(int $sensorId): ?HumidityMeasurement
     {
         $json = file_get_contents($this->url . $sensorId);
