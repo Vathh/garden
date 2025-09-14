@@ -50,7 +50,7 @@ class PagesController
             round($lastMeasurement->getTemperature(), 1) . "°C" : 'Brak danych';
 
         try {
-            $todos = array_slice(Todo::getAllUndone(), 0, 5);
+            $todos = array_slice($todos, 0, 5);
 
             View::render('pages.home', [
                 'userName' => $userName,

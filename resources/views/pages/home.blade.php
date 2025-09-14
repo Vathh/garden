@@ -24,28 +24,28 @@
                     <div class="overview__container-field-subcontainer">
                         <div class="overview__container-field-subcontainer-box">
                             <span class="overview__container-field-subcontainer-box-title">Pilne</span>
-                            <span class="overview__container-field-subcontainer-box-red">{{ $urgentTodosCount }}</span>
+                            <span class="overview__container-field-subcontainer-box-value red">{{ $urgentTodosCount }}</span>
                         </div>
                         <div class="overview__container-field-subcontainer-box">
                             <span class="overview__container-field-subcontainer-box-title">Wszystkie</span>
-                            <span class="overview__container-field-subcontainer-box-green">{{ $nonUrgentTodosCount }}</span>
+                            <span class="overview__container-field-subcontainer-box-value green">{{ $nonUrgentTodosCount }}</span>
                         </div>
                     </div>
                 </div>
                 <div class="overview__container-field">
-                    <span class="overview__container-field-title">Nawadnianie</span>
+                    <span class="overview__container-field-title">Wilgotność</span>
                     <div class="overview__container-field-subcontainer">
                         <div class="overview__container-field-subcontainer-box">
                             <span class="overview__container-field-subcontainer-box-title">Niska</span>
-                            <span class="overview__container-field-subcontainer-box-red">{{ $lowHumidityCount }}</span>
+                            <span class="overview__container-field-subcontainer-box-value red">{{ $lowHumidityCount }}</span>
                         </div>
                         <div class="overview__container-field-subcontainer-box">
                             <span class="overview__container-field-subcontainer-box-title">Średnia</span>
-                            <span class="overview__container-field-subcontainer-box-yellow">{{ $mediumHumidityCount }}</span>
+                            <span class="overview__container-field-subcontainer-box-value yellow">{{ $mediumHumidityCount }}</span>
                         </div>
                         <div class="overview__container-field-subcontainer-box">
                             <span class="overview__container-field-subcontainer-box-title">Dobra</span>
-                            <span class="overview__container-field-subcontainer-box-green">{{ $highHumidityCount }}</span>
+                            <span class="overview__container-field-subcontainer-box-value green">{{ $highHumidityCount }}</span>
                         </div>
                     </div>
                 </div>

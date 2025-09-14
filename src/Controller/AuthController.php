@@ -84,9 +84,9 @@ class AuthController
     public function register(): void
     {
         if (isset($_POST['register'])) {
-            $login = $_POST['login'];
-            $email = $_POST['email'];
-            $password = $_POST['password'];
+            $login = trim(strip_tags($_POST['login'] ?? ''));
+            $email = filter_var($_POST['email'] ?? '', FILTER_VALIDATE_EMAIL);
+            $password = $_POST['password'] ?? '';
             $passwordRepeat = $_POST['passwordRepeat'];
             if ($login != "" &&
                 strlen($login) >= 5 &&

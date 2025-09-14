@@ -45,7 +45,8 @@
 .overview__container-field-title{
     font-weight: 500;
     font-size: 20px;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
+    text-align: center;
 }
 
 .overview__container-field-value{
@@ -60,22 +61,30 @@
 .overview__container-field-subcontainer-box{
     display: flex;
     flex-direction: column;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
 }
 
 .overview__container-field-subcontainer-box-title{
 
 }
 
-.overview__container-field-subcontainer-box-red{
-
+.overview__container-field-subcontainer-box-value{
+    font-weight: bold;
+    font-size: 18px;
 }
 
-.overview__container-field-subcontainer-box-yellow{
-
+.red{
+    color: red;
 }
 
-.overview__container-field-subcontainer-box-green{
+.yellow{
+    color: #ffae00;
+}
 
+.green{
+    color: green;
 }
 
 .sections{

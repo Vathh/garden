@@ -41,8 +41,16 @@ class HumidityService
 
         $data = json_decode($json, true);
 
+        $humidity = $data['humidity'] ?? null;
+
+        if (!is_numeric($humidity) || $humidity < 0 || $humidity > 100) {
+            throw new Exception("Nieprawidłowa wartość wilgotności");
+        }
+
+        $humidity = (float)$humidity;
+
         return (new HumidityMeasurement())->setDateTime(date('Y-m-d H:i:s'))
-                                            ->setHumidity($data['humidity'])
+                                            ->setHumidity($humidity)
                                             ->setSensorId($sensorId);
     }
 }

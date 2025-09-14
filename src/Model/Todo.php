@@ -101,7 +101,18 @@ class Todo
 
     public static function add(string $title, ?string $dueDate): void
     {
+
         $conn = Database::getInstance()->getConnection();
+
+        $title = trim(strip_tags($title));
+
+        if ($dueDate !== null) {
+            $d = DateTime::createFromFormat('Y-m-d', $dueDate);
+            if (!$d || $d->format("Y-m-d") !== $dueDate) {
+                $dueDate = null;
+            }
+        }
+
         $query = "
             INSERT INTO todos (title, deadline, is_done)
             VALUES (?, ?, 0)
@@ -112,6 +123,10 @@ class Todo
 
     public static function setDone(int $id) : bool
     {
+        if ($id <= 0) {
+            return false;
+        }
+
         $conn = Database::getInstance()->getConnection();
         $query = "
             UPDATE todos SET is_done = 1 WHERE id = ?
@@ -150,12 +165,16 @@ class Todo
         $future = [];
 
         foreach ($todos as $todo) {
-            $deadline = new DateTimeImmutable($todo->getDeadline());
-
-            if ($deadline <= $today) {
-                $pastOrToday[] = $todo;
-            } else {
+            if ($todo->getDeadline() == null) {
                 $future[] = $todo;
+            } else {
+                $deadline = new DateTimeImmutable($todo->getDeadline());
+
+                if ($deadline <= $today) {
+                    $pastOrToday[] = $todo;
+                } else {
+                    $future[] = $todo;
+                }
             }
         }
 
