@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Core\Auth;
 use App\Core\View;
 use App\Model\Report;
+use App\Model\TemperatureMeasurement;
 use App\Model\Todo;
 use App\Service\HumidityService;
 use Exception;
@@ -43,6 +44,11 @@ class PagesController
         $urgentTodosCount = count($splitTodos['pastOrToday']);
         $nonUrgentTodosCount = count($splitTodos['future']);
 
+        $lastMeasurement = TemperatureMeasurement::fetchLastMeasurement();
+
+        $internalTemperature = $lastMeasurement !== null ?
+            round($lastMeasurement->getTemperature(), 1) . "°C" : 'Brak danych';
+
         try {
             $todos = array_slice(Todo::getAllUndone(), 0, 5);
 
@@ -54,6 +60,7 @@ class PagesController
                 'highHumidityCount' => count($highHumidity),
                 'urgentTodosCount' => $urgentTodosCount,
                 'nonUrgentTodosCount' => $nonUrgentTodosCount,
+                'internalTemperature' => $internalTemperature
             ]);
         } catch (Exception $e) {
             echo "Błąd: " . $e->getMessage();

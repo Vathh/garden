@@ -6,7 +6,7 @@ use App\Model\HumidityMeasurement;
 
 class HumidityService
 {
-    private String $url = 'https://link_do_czujnika/$sensorId';
+    private String $url = 'https://link_do_czujnika/';
     public static function fetchAll(): array
     {
         // FEJKOWE DANE ZEBY FUNKCJA COS ZWRACALA
@@ -33,7 +33,7 @@ class HumidityService
 
     public function fetchBySensorId(int $sensorId): ?HumidityMeasurement
     {
-        $json = file_get_contents($this->url);
+        $json = file_get_contents($this->url . $sensorId);
 
         if ($json === false) {
             return null;
